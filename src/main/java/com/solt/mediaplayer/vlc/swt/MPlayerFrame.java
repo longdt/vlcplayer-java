@@ -5,6 +5,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -44,10 +45,11 @@ public class MPlayerFrame extends MPlayer {
 		*/
 
 		outerPlayerFrame = new Composite(parent, SWT.NONE);
+		outerPlayerFrame.setLayout(new FillLayout());
 		outerPlayerFrame.setBackground(display.getSystemColor(SWT.COLOR_BLACK));
 		//outerPlayerFrame.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
 		
-		outerPlayerFrame.setLayout(new AspectRatioLayout());		
+//		outerPlayerFrame.setLayout(new AspectRatioLayout());		
 		rendererFrame = new MPlayerRendererCanvas(outerPlayerFrame,SWT.NONE);	
 		rendererFrame.setBackground(display.getSystemColor(SWT.COLOR_BLACK));
 		//rendererFrame.setForeground(display.getSystemColor(SWT.COLOR_RED));
