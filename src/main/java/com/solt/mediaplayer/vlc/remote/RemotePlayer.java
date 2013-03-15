@@ -1,13 +1,15 @@
-package com.solt.mediaplayer.vlc;
+package com.solt.mediaplayer.vlc.remote;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
  
 /**
- * Controls an OutOfProcessPlayer via input / output process streams.
+ * Controls an VLCPlayer via input / output process streams.
  * @author Michael
  */
 public class RemotePlayer {
@@ -21,9 +23,9 @@ public class RemotePlayer {
     /**
      * Internal use only.
      */
-    RemotePlayer(StreamWrapper wrapper) {
-        out = new BufferedWriter(new OutputStreamWriter(wrapper.getOutputStream()));
-        in = new BufferedReader(new InputStreamReader(wrapper.getInputStream()));
+    RemotePlayer(InputStream is, OutputStream os) {
+        out = new BufferedWriter(new OutputStreamWriter(os));
+        in = new BufferedReader(new InputStreamReader(is));
         playing = false;
         open = true;
     }
@@ -103,7 +105,7 @@ public class RemotePlayer {
     }
  
     /**
-     * Terminate the OutOfProcessPlayer. MUST be called before closing, otherwise
+     * Terminate the VLCPlayer. MUST be called before closing, otherwise
      * the player won't quit!
      */
     public void close() {

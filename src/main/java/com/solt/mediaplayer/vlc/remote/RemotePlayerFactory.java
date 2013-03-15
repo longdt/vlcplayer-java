@@ -1,5 +1,6 @@
-package com.solt.mediaplayer.vlc;
+package com.solt.mediaplayer.vlc.remote;
 
+import com.solt.mediaplayer.vlc.VLCPlayer;
 import com.sun.jna.Native;
 import java.awt.Canvas;
 import java.util.ArrayList;
@@ -8,12 +9,12 @@ import java.util.List;
 import uk.co.caprica.vlcj.runtime.RuntimeUtil;
  
 public class RemotePlayerFactory {
+	private static final boolean DEBUG_MODE = false;
  
-    public static RemotePlayer getRemotePlayer(Canvas canvas) {
+    public static RemotePlayer getRemotePlayer(long componentId) {
         try {
-            long drawable = Native.getComponentID(canvas);
-            StreamWrapper wrapper = startSecondJVM(drawable);
-            final RemotePlayer player = new RemotePlayer(wrapper);
+            Process process = startSecondJVM(componentId);
+            final RemotePlayer player = new RemotePlayer(process.getInputStream(), process.getOutputStream());
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 @Override
                 public void run() {
@@ -26,8 +27,12 @@ public class RemotePlayerFactory {
             throw new RuntimeException("Couldn't create remote player", ex);
         }
     }
- 
-    private static StreamWrapper startSecondJVM(long drawable) throws Exception {
+    
+    public static RemotePlayer getRemotePlayer(Canvas canvas) {
+    	  return getRemotePlayer(Native.getComponentID(canvas));
+    }
+    
+    public static Process startSecondJVM(long drawable) throws Exception {
         String separator = System.getProperty("file.separator");
         String classpath = System.getProperty("java.class.path");
         String path = System.getProperty("java.home")
@@ -37,8 +42,7 @@ public class RemotePlayerFactory {
         }
         List<String> cmdList = new ArrayList<String>();
         cmdList.add(path);
-        boolean debugMode = false;
-        if (debugMode) {
+        if (DEBUG_MODE) {
         	cmdList.add("-Xdebug");
         	cmdList.add("-Xnoagent");
         	cmdList.add("-Djava.compiler=NONE");
@@ -50,10 +54,9 @@ public class RemotePlayerFactory {
         if (jnaLibPath != null) {
         	cmdList.add("-Djna.library.path=" + jnaLibPath);
         }
-        cmdList.add(OutOfProcessPlayer.class.getName());
+        cmdList.add(VLCPlayer.class.getName());
         cmdList.add(Long.toString(drawable));
         ProcessBuilder processBuilder = new ProcessBuilder(cmdList);
-        Process process = processBuilder.start();
-        return new StreamWrapper(process.getInputStream(), process.getOutputStream());
+        return processBuilder.start();
     }
 }

@@ -216,7 +216,7 @@ public class DemoVlcjTube {
             mediaPlayer.playMedia(evt.location, getRecordAudioMediaOptions("vlcj-tube"));
           }
           else {
-            mediaPlayer.playMedia("http://127.0.0.1:18080/stream?hashcode=45961e1f0cc76014dab788e9824294bfde5ce6a0");
+            mediaPlayer.playMedia("D:\\Music\\Gockhuyet_kienza.avi");
           }
         }
       }

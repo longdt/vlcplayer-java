@@ -1,4 +1,4 @@
-package com.solt.mediaplayer.vlc;
+package com.solt.mediaplayer.vlc.remote;
 
 import java.awt.Canvas;
 

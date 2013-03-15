@@ -5,26 +5,27 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 
+import com.solt.mediaplayer.vlc.remote.ComponentIdVideoSurface;
+
 import uk.co.caprica.vlcj.binding.LibVlc;
 import uk.co.caprica.vlcj.binding.LibVlcFactory;
 import uk.co.caprica.vlcj.discovery.NativeDiscovery;
 import uk.co.caprica.vlcj.player.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
-import com.sun.jna.NativeLibrary;
  
 /**
  * Sits out of process so as not to crash the primary VM.
  * @author Michael
  */
-public class OutOfProcessPlayer {
- 
-    public OutOfProcessPlayer(final long canvasId) throws Exception {
+public class VLCPlayer {
+	private EmbeddedMediaPlayer mediaPlayer;
+    public VLCPlayer(final long canvasId) throws Exception {
  
         //Lifted pretty much out of the VLCJ code
     	LibVlc libvlc = LibVlcFactory.factory().synchronise().log().create();
     	MediaPlayerFactory playerFactory = new MediaPlayerFactory(libvlc, "--no-video-title");
-        EmbeddedMediaPlayer mediaPlayer = playerFactory.newEmbeddedMediaPlayer();
+    	mediaPlayer = playerFactory.newEmbeddedMediaPlayer();
 
         mediaPlayer.setVideoSurface(ComponentIdVideoSurface.create(canvasId));
  
@@ -77,14 +78,18 @@ public class OutOfProcessPlayer {
             }
         }
     }
+    
+    public void setVideoSurface(long componentId) {
+    	mediaPlayer.setVideoSurface(ComponentIdVideoSurface.create(componentId));
+    }
  
     public static void main(String[] args) {
     	new NativeDiscovery().discover();
         PrintStream stream = null;
         try {
-            stream = new PrintStream(new File("ooplog.txt"));
+            stream = new PrintStream(new File("vlcErr.txt"));
             System.setErr(stream); //This is important, need to direct error stream somewhere
-            new OutOfProcessPlayer(Integer.parseInt(args[0]));
+            new VLCPlayer(Integer.parseInt(args[0]));
         }
         catch (Exception ex) {
             ex.printStackTrace();

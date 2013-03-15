@@ -9,8 +9,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import com.solt.mediaplayer.vlc.RemotePlayer;
-import com.solt.mediaplayer.vlc.RemotePlayerFactory;
+import com.solt.mediaplayer.vlc.remote.RemotePlayer;
+import com.solt.mediaplayer.vlc.remote.RemotePlayerFactory;
 
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 import uk.co.caprica.vlcj.discovery.NativeDiscovery;
