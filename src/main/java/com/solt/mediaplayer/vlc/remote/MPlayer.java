@@ -400,7 +400,7 @@ public abstract class MPlayer extends BaseMediaPlayer {
 		}
 	}
 	
-	public abstract String[] getExtraMplayerOptions();
+	public abstract long getComponentId();
 	public abstract void setAspectRatio(float aspectRatio);
 
 	
@@ -425,7 +425,7 @@ public abstract class MPlayer extends BaseMediaPlayer {
 		
 		instance.doOpen( 
 			fileOrUrl, 
-			getExtraMplayerOptions(),
+			getComponentId(),
 			new MPlayerInstance.OutputConsumer()
 			{
 				public void

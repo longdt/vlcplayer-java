@@ -32,7 +32,7 @@ public class RemotePlayerFactory {
     	  return getRemotePlayer(Native.getComponentID(canvas));
     }
     
-    public static Process startSecondJVM(long drawable) throws Exception {
+    public static Process startSecondJVM(long componentId, String fileOrUrl) throws Exception {
         String separator = System.getProperty("file.separator");
         String classpath = System.getProperty("java.class.path");
         String path = System.getProperty("java.home")
@@ -55,8 +55,15 @@ public class RemotePlayerFactory {
         	cmdList.add("-Djna.library.path=" + jnaLibPath);
         }
         cmdList.add(VLCPlayer.class.getName());
-        cmdList.add(Long.toString(drawable));
+        cmdList.add(Long.toString(componentId));
+        if (fileOrUrl != null) {
+        	cmdList.add(fileOrUrl);
+        }
         ProcessBuilder processBuilder = new ProcessBuilder(cmdList);
         return processBuilder.start();
     }
+
+	public static Process startSecondJVM(long componentId) throws Exception {
+		return startSecondJVM(componentId, null);
+	}
 }

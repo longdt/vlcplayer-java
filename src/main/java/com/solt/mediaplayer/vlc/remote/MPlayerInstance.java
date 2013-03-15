@@ -44,7 +44,7 @@ public class MPlayerInstance {
 	private static int LISTEN_PORT;
 
 	public static void initialise() {
-		killProcesses(false);
+		//killProcesses(false);
 	}
 
 	public static void setBinaryPath(String path) {
@@ -80,7 +80,7 @@ public class MPlayerInstance {
 
 	private String fileOpened;
 
-	public void doOpen(String fileOrUrl, String[] extraArgs,
+	public void doOpen(String fileOrUrl, long componentId,
 			final OutputConsumer _outputConsumer) {
 		synchronized (this) {
 
@@ -115,86 +115,10 @@ public class MPlayerInstance {
 
 			fileOpened = fileOrUrl;
 
-			List<String> cmdList = new ArrayList<String>();
-
-			cmdList.add(VLC_PATH.getAbsolutePath());
-
-			cmdList.add("-slave");
-
-			// cmdList.add("-quiet");
-
-			cmdList.add("-identify");
-
-			cmdList.add("-prefer-ipv4");
-
-			cmdList.add("-osdlevel");
-			cmdList.add("0");
-
-			/*
-			 * if(Utils.isWindows()) { cmdList.add("-nofontconfig"); }
-			 */
-
-			cmdList.add("-noautosub");
-
-			if (Utils.isWindows()) {
-				cmdList.add("-priority");
-				cmdList.add("high");
-			} else {
-				cmdList.add(0, ShellUtilityFinder.getNice());
-				cmdList.add(1, "-n");
-				cmdList.add(2, "0");
-			}
-
-			if (Utils.isWindows()) {
-
-				cmdList.add("-ass");
-				cmdList.add("-ass-color");
-				cmdList.add("FFFFFF00");
-				cmdList.add("-ass-border-color");
-				cmdList.add("00000040");
-			}
-
-			Font font = Font.getFont("ARIALBD.TTF");
-			if (font != null) {
-				cmdList.add("-font");
-				cmdList.add(font.getFontPath());
-				cmdList.add("-subfont-text-scale");
-				cmdList.add(Utils.isWindows() ? "6.5" : "4.5");
-				cmdList.add("-subfont-blur");
-				cmdList.add("4");
-				cmdList.add("-subfont-outline");
-				cmdList.add("2");
-			}
-
-			cmdList.add("-framedrop");
-
-			for (String arg : extraArgs) {
-				cmdList.add(arg);
-			}
-
-			// Set the volume at 0 as we load, as we don't want to hear sound
-			// before we resize / seek.
-			// cmdList.add("-volume");
-			// cmdList.add("0");
-
-			cmdList.add(fileOrUrl);
-
-			String[] cmd = cmdList.toArray(new String[cmdList.size()]);
-
-			for (int i = 0; i < cmd.length; i++) {
-				if (cmd[i].contains(" ")) {
-					System.out.print("\"");
-				}
-				System.out.print(cmd[i]);
-				if (cmd[i].contains(" ")) {
-					System.out.print("\"");
-				}
-				System.out.print(" ");
-			}
-			System.out.println("\n");
+			
 
 			try {
-				mPlayerProcess = Runtime.getRuntime().exec(cmd);
+				mPlayerProcess = RemotePlayerFactory.startSecondJVM(componentId, fileOrUrl);
 
 				InputStream stdOut = mPlayerProcess.getInputStream();
 				InputStream stdErr = mPlayerProcess.getErrorStream();
@@ -724,7 +648,7 @@ public class MPlayerInstance {
 	private static void killProcesses(boolean delay) {
 		if (Utils.isMacOSX()) {
 
-			String process_name = VLC_PATH.getName();
+			String process_name = null;
 
 			if (LOG) {
 				System.out.println("running killall -9 " + process_name);
@@ -743,7 +667,7 @@ public class MPlayerInstance {
 
 		} else if (Utils.isWindows()) {
 
-			String process_name = VLC_PATH.getName();
+			String process_name = null;
 
 			int pos = process_name.lastIndexOf(".");
 

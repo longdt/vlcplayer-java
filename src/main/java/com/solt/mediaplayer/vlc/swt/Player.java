@@ -717,5 +717,12 @@ public class Player {
 			}
 		}
 	}
+	
+	public static void main(String[] args) throws Exception {
+		Shell shell = new Shell();
+		shell.setSize(880, 480);
+		shell.setText("SWT Application");
+		play(shell, "D:\\Music\\Gockhuyet_kienza.avi");
+	}
 
 }

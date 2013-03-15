@@ -111,8 +111,8 @@ public class MPlayerFrame extends MPlayer {
 	}
 	
 	
-	public String[] getExtraMplayerOptions() {
-		return rendererFrame.getExtraMplayerOptions();
+	public long getComponentId() {
+		return rendererFrame.getComponentId();
 	}
 	
 	

@@ -20,7 +20,12 @@ import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
  */
 public class VLCPlayer {
 	private EmbeddedMediaPlayer mediaPlayer;
-    public VLCPlayer(final long canvasId) throws Exception {
+	
+    public VLCPlayer(int canvasId) throws Exception {
+    	this(canvasId, null);
+	}
+	
+    public VLCPlayer(final long canvasId, String media) throws Exception {
  
         //Lifted pretty much out of the VLCJ code
     	LibVlc libvlc = LibVlcFactory.factory().synchronise().log().create();
@@ -28,7 +33,9 @@ public class VLCPlayer {
     	mediaPlayer = playerFactory.newEmbeddedMediaPlayer();
 
         mediaPlayer.setVideoSurface(ComponentIdVideoSurface.create(canvasId));
- 
+        if (media != null) {
+        	mediaPlayer.playMedia(media);
+        }
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         String inputLine;
  
@@ -79,17 +86,21 @@ public class VLCPlayer {
         }
     }
     
-    public void setVideoSurface(long componentId) {
+	public void setVideoSurface(long componentId) {
     	mediaPlayer.setVideoSurface(ComponentIdVideoSurface.create(componentId));
     }
  
     public static void main(String[] args) {
     	new NativeDiscovery().discover();
         PrintStream stream = null;
+        String media = null;
         try {
             stream = new PrintStream(new File("vlcErr.txt"));
             System.setErr(stream); //This is important, need to direct error stream somewhere
-            new VLCPlayer(Integer.parseInt(args[0]));
+            if (args.length == 2) {
+            	media = args[1];
+            }
+            new VLCPlayer(Integer.parseInt(args[0]), media);
         }
         catch (Exception ex) {
             ex.printStackTrace();
