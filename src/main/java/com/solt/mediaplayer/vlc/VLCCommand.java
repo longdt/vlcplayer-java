@@ -46,4 +46,6 @@ public class VLCCommand {
 	public static final String GET_DIMENSION = "dimension?";
 	
 	public static final String ANS_DIMENSION = "ans_dimension";
+	
+	public static final String LOAD_SUB = "loadSub";
 }

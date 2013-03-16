@@ -611,7 +611,7 @@ public class MPlayerInstance {
 	protected void doLoadSubtitlesFile(String file, boolean autoPlay) {
 		synchronized (this) {
 			activateNextSubtitleLoaded = autoPlay;
-			sendCommand("sub_load \"" + file + "\"");
+			sendCommand(VLCCommand.LOAD_SUB + " " + file);
 		}
 	}
 

@@ -112,6 +112,9 @@ public class VLCPlayer {
             	if (dim != null) {
             		System.out.println(VLCCommand.ANS_DIMENSION + " " + dim.width + "x" + dim.height);
             	}
+            } else if (inputLine.startsWith(VLCCommand.LOAD_SUB)) {
+            	inputLine = inputLine.substring(VLCCommand.LOAD_SUB.length() + 1);
+            	mediaPlayer.setSubTitleFile(new File(inputLine));
             }
              
             else if (inputLine.equalsIgnoreCase(VLCCommand.CLOSE)) {
