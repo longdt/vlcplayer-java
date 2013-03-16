@@ -50,6 +50,11 @@ public class VLCPlayer {
         	public void timeChanged(MediaPlayer mediaPlayer, long newTime) {
         		System.out.println(VLCCommand.STATUS_TIME + " " + newTime);
         	}
+        	
+        	@Override
+        	public void lengthChanged(MediaPlayer mediaPlayer, long newLength) {
+        		System.out.println(VLCCommand.STATUS_LENGTH + " " + newLength);
+        	}
         });
         handleRequest();
     }

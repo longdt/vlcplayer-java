@@ -5,6 +5,8 @@ public class VLCCommand {
 	
 	public static final String STATUS_TIME = "st_time";
 	
+	public static final String STATUS_LENGTH = "st_length";
+	
 	public static final String OPEN = "open";
 	
 	public static final String PLAY = "play";

@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.solt.mediaplayer.vlc.VLCCommand;
+
 
 public abstract class MPlayer extends BaseMediaPlayer {
 
@@ -65,9 +67,7 @@ public abstract class MPlayer extends BaseMediaPlayer {
 		
 	}
 	
-	private static final String ANS_LENGTH = "ANS_LENGTH=";
 	private static final String ANS_POSITION = "ANS_TIME_POSITION=";
-	private static final String ANS_VOLUME = "ANS_VOLUME=";
 	private static final String ANS_SUB = "ANS_SUB=";
 	
 	private static final String ANS_WIDTH = "ANS_WIDTH=";
@@ -137,7 +137,7 @@ public abstract class MPlayer extends BaseMediaPlayer {
 				}
 			}
 		} else
-		if(line.startsWith("Starting playback...")) {
+		if(line.startsWith(VLCCommand.STATUS_PLAYING)) {
 			//Ok, so the file is initialized, let's gather information
 			stateListener.stateChanged(MediaPlaybackState.Playing);
 			
@@ -164,9 +164,9 @@ public abstract class MPlayer extends BaseMediaPlayer {
 				e.printStackTrace();
 			}
 		} else
-		if(line.startsWith(ANS_LENGTH)) {
+		if(line.startsWith(VLCCommand.STATUS_LENGTH)) {
 			try {
-				float duration = Float.parseFloat(line.substring(ANS_LENGTH.length()));
+				float duration = Float.parseFloat(line.substring(VLCCommand.STATUS_LENGTH.length()));
 				if(!firstLengthReceived) {
 					firstLengthReceived = true;
 				}
@@ -175,9 +175,9 @@ public abstract class MPlayer extends BaseMediaPlayer {
 				e.printStackTrace();
 			}
 		} else
-		if(line.startsWith(ANS_VOLUME)) {
+		if(line.startsWith(VLCCommand.ANS_VOLUME)) {
 			try {
-				int volume = (int) Float.parseFloat(line.substring(ANS_VOLUME.length()));
+				int volume = (int) Float.parseFloat(line.substring(VLCCommand.ANS_VOLUME.length()));
 				reportVolume(volume);
 				if(!firstVolumeReceived) {
 					firstVolumeReceived = true;

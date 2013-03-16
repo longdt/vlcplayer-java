@@ -297,7 +297,7 @@ public class MPlayerInstance {
 
 			sendCommand("get_property HEIGHT");
 
-			sendCommand("get_property VOLUME");
+			sendCommand(VLCCommand.GET_VOLUME);
 
 		}
 	}
