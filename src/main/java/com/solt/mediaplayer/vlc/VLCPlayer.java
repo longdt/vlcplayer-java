@@ -2,6 +2,7 @@ package com.solt.mediaplayer.vlc;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 
@@ -10,6 +11,7 @@ import com.solt.mediaplayer.vlc.remote.ComponentIdVideoSurface;
 import uk.co.caprica.vlcj.binding.LibVlc;
 import uk.co.caprica.vlcj.binding.LibVlcFactory;
 import uk.co.caprica.vlcj.discovery.NativeDiscovery;
+import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
@@ -36,6 +38,13 @@ public class VLCPlayer {
         if (media != null) {
         	mediaPlayer.playMedia(media);
         }
+        mediaPlayer.addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
+        	
+        });
+        handleRequest();
+    }
+    
+    private void handleRequest() throws NumberFormatException, IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         String inputLine;
  
