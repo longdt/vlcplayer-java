@@ -11,6 +11,7 @@ import com.solt.mediaplayer.vlc.remote.ComponentIdVideoSurface;
 import uk.co.caprica.vlcj.binding.LibVlc;
 import uk.co.caprica.vlcj.binding.LibVlcFactory;
 import uk.co.caprica.vlcj.discovery.NativeDiscovery;
+import uk.co.caprica.vlcj.player.MediaPlayer;
 import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
@@ -40,6 +41,15 @@ public class VLCPlayer {
         }
         mediaPlayer.addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
         	
+        	@Override
+        	public void playing(MediaPlayer mediaPlayer) {
+        		System.out.println(VLCCommand.STATUS_PLAYING);
+        	}
+        	
+        	@Override
+        	public void timeChanged(MediaPlayer mediaPlayer, long newTime) {
+        		System.out.println(VLCCommand.STATUS_TIME + " " + newTime);
+        	}
         });
         handleRequest();
     }
@@ -50,47 +60,47 @@ public class VLCPlayer {
  
         //Process the input - I know this isn't very OO but it works for now...
         while ((inputLine = in.readLine()) != null) {
-            if (inputLine.startsWith("open ")) {
-                inputLine = inputLine.substring("open ".length());
+            if (inputLine.startsWith(VLCCommand.OPEN)) {
+                inputLine = inputLine.substring(VLCCommand.OPEN.length());
                 mediaPlayer.prepareMedia(inputLine);
             }
-            else if (inputLine.equalsIgnoreCase("play")) {
+            else if (inputLine.equalsIgnoreCase(VLCCommand.PLAY)) {
                 mediaPlayer.play();
             }
-            else if (inputLine.equalsIgnoreCase("pause")) {
+            else if (inputLine.equalsIgnoreCase(VLCCommand.PAUSE)) {
                 mediaPlayer.pause();
             }
-            else if (inputLine.equalsIgnoreCase("stop")) {
+            else if (inputLine.equalsIgnoreCase(VLCCommand.STOP)) {
                 mediaPlayer.stop();
             }
-            else if (inputLine.equalsIgnoreCase("playable?")) {
+            else if (inputLine.equalsIgnoreCase(VLCCommand.GET_PLAYABLE)) {
                 System.out.println(mediaPlayer.isPlayable());
             }
-            else if (inputLine.startsWith("setTime ")) {
-                inputLine = inputLine.substring("setTime ".length());
+            else if (inputLine.startsWith(VLCCommand.SET_TIME)) {
+                inputLine = inputLine.substring(VLCCommand.SET_TIME.length());
                 mediaPlayer.setTime(Long.parseLong(inputLine));
             }
-            else if (inputLine.startsWith("setMute ")) {
-                inputLine = inputLine.substring("setMute ".length());
+            else if (inputLine.startsWith(VLCCommand.SET_MUTE)) {
+                inputLine = inputLine.substring(VLCCommand.SET_MUTE.length());
                 mediaPlayer.mute(Boolean.parseBoolean(inputLine));
             }
-            else if (inputLine.equalsIgnoreCase("mute?")) {
+            else if (inputLine.equalsIgnoreCase(VLCCommand.GET_MUTE)) {
                 boolean mute = mediaPlayer.isMute();
                 System.out.println(mute);
             }
-            else if (inputLine.equalsIgnoreCase("length?")) {
+            else if (inputLine.equalsIgnoreCase(VLCCommand.GET_LENGTH)) {
                 long length = mediaPlayer.getLength();
                 System.out.println(length);
             }
-            else if (inputLine.equalsIgnoreCase("time?")) {
+            else if (inputLine.equalsIgnoreCase(VLCCommand.GET_TIME)) {
                 long time = mediaPlayer.getTime();
                 System.out.println(time);
             }
-            else if (inputLine.equalsIgnoreCase("close")) {
+            else if (inputLine.equalsIgnoreCase(VLCCommand.CLOSE)) {
                 System.exit(0);
             }
             else {
-                System.out.println("unknown command: ." + inputLine + ".");
+                System.err.println("unknown command: ." + inputLine + ".");
             }
         }
     }
