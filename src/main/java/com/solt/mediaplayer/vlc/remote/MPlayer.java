@@ -67,7 +67,6 @@ public abstract class MPlayer extends BaseMediaPlayer {
 		
 	}
 	
-	private static final String ANS_POSITION = "ANS_TIME_POSITION=";
 	private static final String ANS_SUB = "ANS_SUB=";
 	
 	private static final String ANS_WIDTH = "ANS_WIDTH=";
@@ -134,7 +133,7 @@ public abstract class MPlayer extends BaseMediaPlayer {
 			
 			reportNewState(MediaPlaybackState.Playing);
 		} else
-		if(line.startsWith(ANS_POSITION)) {
+		if(line.startsWith(VLCCommand.ANS_TIME)) {
 			try {
 				MPlayerInstance instance = getCurrentInstance();
 				
@@ -142,7 +141,7 @@ public abstract class MPlayer extends BaseMediaPlayer {
 					instance.positioned();
 				}
 				
-				float position = Float.parseFloat(line.substring(ANS_POSITION.length()));
+				float position = Float.parseFloat(line.substring(VLCCommand.ANS_TIME.length()));
 				reportPosition(position);
 			} catch (Exception e) {
 				e.printStackTrace();
