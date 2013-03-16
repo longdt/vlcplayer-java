@@ -88,9 +88,6 @@ public abstract class MPlayer extends BaseMediaPlayer {
 	
 	private static final String ID_EXIT = "ID_EXIT=";
 	
-	private static final Pattern v_timeInfo = Pattern.compile("A:\\s*([0-9\\.]+) V:\\s*[0-9\\.]* .*");
-	private static final Pattern a_timeInfo = Pattern.compile("A:\\s*([0-9\\.]+) .*");
-	
 	private MPlayerInstance	current_instance;
 	
 	private boolean parsingLanguage;
@@ -103,21 +100,8 @@ public abstract class MPlayer extends BaseMediaPlayer {
 	private void parseOutput(String line) {
 		boolean stillParsing = false;
 			
-		//if ( !line.startsWith( "A:")){
-		//	System.out.println(line);
-		//}
-		Matcher v_matcher = v_timeInfo.matcher(line);
-		Matcher a_matcher = a_timeInfo.matcher(line);
-		if(v_matcher.matches()) {
-			float time = Float.parseFloat(v_matcher.group(1));
-			MPlayerInstance instance = getCurrentInstance();
-			
-			if ( instance != null ){
-				instance.positioned(time);
-			}
-			reportPosition(time);
-		} else if(a_matcher.matches()) {
-			float time = Float.parseFloat(a_matcher.group(1));
+		if(line.startsWith(VLCCommand.STATUS_TIME)) {
+			float time = Float.parseFloat(line.substring(VLCCommand.STATUS_TIME.length()));
 			MPlayerInstance instance = getCurrentInstance();
 			
 			if ( instance != null ){

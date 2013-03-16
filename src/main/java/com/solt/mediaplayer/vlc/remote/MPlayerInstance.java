@@ -40,7 +40,7 @@ import com.solt.mediaplayer.vlc.VLCCommand;
 import com.solt.mediaplayer.vlc.fonts.Font;
 
 public class MPlayerInstance {
-	private static final boolean LOG = false;
+	private static final boolean LOG = true;
 
 	private static int LISTEN_PORT;
 
