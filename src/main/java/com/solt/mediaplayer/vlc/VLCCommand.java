@@ -25,6 +25,8 @@ public class VLCCommand {
 	
 	public static final String SET_MUTE = "setMute";
 	
+	public static final String SET_VOLUME = "setVolume";
+	
 	public static final String GET_MUTE = "mute?";
 	
 	public static final String ANS_MUTE = "ans_mute";

@@ -66,7 +66,7 @@ public class VLCPlayer {
         //Process the input - I know this isn't very OO but it works for now...
         while ((inputLine = in.readLine()) != null) {
             if (inputLine.startsWith(VLCCommand.OPEN)) {
-                inputLine = inputLine.substring(VLCCommand.OPEN.length());
+                inputLine = inputLine.substring(VLCCommand.OPEN.length() + 1);
                 mediaPlayer.prepareMedia(inputLine);
             }
             else if (inputLine.equalsIgnoreCase(VLCCommand.PLAY)) {
@@ -82,12 +82,15 @@ public class VLCPlayer {
                 System.out.println(VLCCommand.ANS_PLAYABLE + " " + mediaPlayer.isPlayable());
             }
             else if (inputLine.startsWith(VLCCommand.SET_TIME)) {
-                inputLine = inputLine.substring(VLCCommand.SET_TIME.length());
+                inputLine = inputLine.substring(VLCCommand.SET_TIME.length() + 1);
                 mediaPlayer.setTime(Long.parseLong(inputLine));
             }
             else if (inputLine.startsWith(VLCCommand.SET_MUTE)) {
-                inputLine = inputLine.substring(VLCCommand.SET_MUTE.length());
+                inputLine = inputLine.substring(VLCCommand.SET_MUTE.length() + 1);
                 mediaPlayer.mute(Boolean.parseBoolean(inputLine));
+            } else if (inputLine.startsWith(VLCCommand.SET_VOLUME)) {
+            	inputLine = inputLine.substring(VLCCommand.SET_VOLUME.length() + 1);
+            	mediaPlayer.setVolume(Integer.parseInt(inputLine));
             }
             else if (inputLine.equalsIgnoreCase(VLCCommand.GET_MUTE)) {
                 boolean mute = mediaPlayer.isMute();

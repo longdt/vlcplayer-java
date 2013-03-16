@@ -470,7 +470,7 @@ public class MPlayerInstance {
 	protected void doSetVolume(int volume) {
 		synchronized (this) {
 
-			sendCommand("volume " + volume + " 1");
+			sendCommand(VLCCommand.SET_VOLUME + " " + volume);
 
 			// sendCommand("get_property VOLUME");
 		}
