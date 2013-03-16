@@ -1,5 +1,6 @@
 package com.solt.mediaplayer.vlc;
 
+import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -106,6 +107,11 @@ public class VLCPlayer {
             } else if (inputLine.equalsIgnoreCase(VLCCommand.GET_VOLUME)) {
             	int volume = mediaPlayer.getVolume();
             	System.out.println(VLCCommand.ANS_VOLUME + " " + volume);
+            } else if (inputLine.equalsIgnoreCase(VLCCommand.GET_DIMENSION)) {
+            	Dimension dim = mediaPlayer.getVideoDimension();
+            	if (dim != null) {
+            		System.out.println(VLCCommand.ANS_DIMENSION + " " + dim.width + "x" + dim.height);
+            	}
             }
              
             else if (inputLine.equalsIgnoreCase(VLCCommand.CLOSE)) {

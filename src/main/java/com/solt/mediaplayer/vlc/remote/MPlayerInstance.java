@@ -277,6 +277,12 @@ public class MPlayerInstance {
 			command_sem.release();
 		}
 	}
+	
+	protected void doGetDimension() {
+		synchronized (this) {
+			sendCommand(VLCCommand.GET_DIMENSION);
+		}
+	}
 
 	protected void sendCommand(String cmd) {
 		sendCommand(cmd, true);
@@ -294,8 +300,6 @@ public class MPlayerInstance {
 			sendCommand("get_property ASPECT");
 
 			sendCommand("get_property WIDTH");
-
-			sendCommand("get_property HEIGHT");
 
 			sendCommand(VLCCommand.GET_VOLUME);
 

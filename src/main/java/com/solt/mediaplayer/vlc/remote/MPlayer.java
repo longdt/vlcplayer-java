@@ -69,8 +69,6 @@ public abstract class MPlayer extends BaseMediaPlayer {
 	
 	private static final String ANS_SUB = "ANS_SUB=";
 	
-	private static final String ANS_WIDTH = "ANS_WIDTH=";
-	private static final String ANS_HEIGHT = "ANS_HEIGHT=";
 	private static final String ANS_ASPECT = "ANS_ASPECT=";
 	
 	
@@ -92,7 +90,7 @@ public abstract class MPlayer extends BaseMediaPlayer {
 	private boolean parsingLanguage;
 	private boolean isAudioTrack;
 	private Language language;
-	
+	private volatile boolean firstTime = true;
 	private int width;
 	private float aspect;
 	
@@ -105,20 +103,12 @@ public abstract class MPlayer extends BaseMediaPlayer {
 			
 			if ( instance != null ){
 				instance.positioned(time);
-			}
-			reportPosition(time);
-		} else		
-		if(line.startsWith("VIDEO:")) {
-			Pattern p = Pattern.compile(".*?([0-9]+)x([0-9]+).*?");
-			Matcher m = p.matcher(line);
-			if(m.matches()) {
-				int width = Integer.parseInt(m.group(1));
-				int height = Integer.parseInt(m.group(2));
-				
-				if(metaDataListener != null) {
-					setAspectRatio((float)width / (float)height);
+				if (firstTime) {
+					instance.doGetDimension();
+					firstTime = false;
 				}
 			}
+			reportPosition(time);
 		} else
 		if(line.startsWith(VLCCommand.STATUS_PLAYING)) {
 			//Ok, so the file is initialized, let's gather information
@@ -179,28 +169,31 @@ public abstract class MPlayer extends BaseMediaPlayer {
 				e.printStackTrace();
 			}
 		} else
-		if(line.startsWith(ANS_WIDTH)) {
+		if(line.startsWith(VLCCommand.ANS_DIMENSION)) {
 			try {
-				width = Integer.parseInt(line.substring(ANS_WIDTH.length()));
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else
-		if(line.startsWith(ANS_HEIGHT)) {
-			try {
-				int videoWidth = width;
-				int videoHeight = Integer.parseInt(line.substring(ANS_HEIGHT.length()));
-				
-				int displayWidth = videoWidth;
-				int displayHeight = videoHeight;
-				
-				if(aspect > 0 && abs(aspect-(float)videoWidth / (float)videoHeight) > 0.1) {
-					displayWidth = (int) (displayHeight * aspect);
-				}
-				if(metaDataListener != null) {
-					metaDataListener.receivedVideoResolution(videoWidth, videoHeight);
-					metaDataListener.receivedDisplayResolution(displayWidth, displayHeight);
+				Pattern p = Pattern.compile(".*?([0-9]+)x([0-9]+).*?");
+				Matcher m = p.matcher(line);
+				if(m.matches()) {
+					width = Integer.parseInt(m.group(1));
+					int height = Integer.parseInt(m.group(2));
+					
+					if(metaDataListener != null) {
+						setAspectRatio((float)width / (float)height);
+					}
+
+					int videoWidth = width;
+					int videoHeight = height;
+					
+					int displayWidth = videoWidth;
+					int displayHeight = videoHeight;
+					
+					if(aspect > 0 && abs(aspect-(float)videoWidth / (float)videoHeight) > 0.1) {
+						displayWidth = (int) (displayHeight * aspect);
+					}
+					if(metaDataListener != null) {
+						metaDataListener.receivedVideoResolution(videoWidth, videoHeight);
+						metaDataListener.receivedDisplayResolution(displayWidth, displayHeight);
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
