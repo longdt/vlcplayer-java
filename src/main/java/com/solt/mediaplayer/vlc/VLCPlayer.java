@@ -74,7 +74,7 @@ public class VLCPlayer {
                 mediaPlayer.stop();
             }
             else if (inputLine.equalsIgnoreCase(VLCCommand.GET_PLAYABLE)) {
-                System.out.println(mediaPlayer.isPlayable());
+                System.out.println(VLCCommand.ANS_PLAYABLE + " " + mediaPlayer.isPlayable());
             }
             else if (inputLine.startsWith(VLCCommand.SET_TIME)) {
                 inputLine = inputLine.substring(VLCCommand.SET_TIME.length());
@@ -86,16 +86,20 @@ public class VLCPlayer {
             }
             else if (inputLine.equalsIgnoreCase(VLCCommand.GET_MUTE)) {
                 boolean mute = mediaPlayer.isMute();
-                System.out.println(mute);
+                System.out.println(VLCCommand.ANS_MUTE + " " + mute);
             }
             else if (inputLine.equalsIgnoreCase(VLCCommand.GET_LENGTH)) {
                 long length = mediaPlayer.getLength();
-                System.out.println(length);
+                System.out.println(VLCCommand.ANS_LENGTH + " " + length);
             }
             else if (inputLine.equalsIgnoreCase(VLCCommand.GET_TIME)) {
                 long time = mediaPlayer.getTime();
-                System.out.println(time);
+                System.out.println(VLCCommand.ANS_TIME + " " + time);
+            } else if (inputLine.equalsIgnoreCase(VLCCommand.GET_VOLUME)) {
+            	int volume = mediaPlayer.getVolume();
+            	System.out.println(VLCCommand.ANS_VOLUME + " " + volume);
             }
+             
             else if (inputLine.equalsIgnoreCase(VLCCommand.CLOSE)) {
                 System.exit(0);
             }

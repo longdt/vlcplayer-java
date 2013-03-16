@@ -36,6 +36,7 @@ import com.solt.mediaplayer.util.ShellUtilityFinder;
 import com.solt.mediaplayer.util.SimpleTimer;
 import com.solt.mediaplayer.util.SystemTime;
 import com.solt.mediaplayer.util.Utils;
+import com.solt.mediaplayer.vlc.VLCCommand;
 import com.solt.mediaplayer.vlc.fonts.Font;
 
 public class MPlayerInstance {
@@ -160,7 +161,7 @@ public class MPlayerInstance {
 
 									System.out.println("<- " + line);
 								}
-								output_consumer.consume(line);
+	//							output_consumer.consume(line);
 							}
 						} catch (Exception e) {
 							// e.printStackTrace();
@@ -625,9 +626,9 @@ public class MPlayerInstance {
 				return;
 			}
 
-			sendCommand("stop");
+			sendCommand(VLCCommand.STOP);
 
-			sendCommand("quit 0");
+			sendCommand(VLCCommand.CLOSE);
 
 			stopped = true;
 
