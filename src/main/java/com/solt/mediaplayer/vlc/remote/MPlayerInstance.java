@@ -159,7 +159,7 @@ public class MPlayerInstance {
 
 								if (LOG && !line.startsWith("A:")) {
 
-									System.out.println("<- " + line);
+									System.err.println("<- " + line);
 								}
 	//							output_consumer.consume(line);
 							}
@@ -357,7 +357,7 @@ public class MPlayerInstance {
 
 			paused = true;
 
-			pausedStateChanging();
+//			pausedStateChanging();
 
 			sendCommand("pause", false);
 
@@ -375,7 +375,7 @@ public class MPlayerInstance {
 
 			paused = false;
 
-			pausedStateChanging();
+//			pausedStateChanging();
 
 			sendCommand("pause", false);
 
