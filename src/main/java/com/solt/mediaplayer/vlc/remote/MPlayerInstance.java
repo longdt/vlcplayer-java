@@ -404,7 +404,7 @@ public class MPlayerInstance {
 
 				// sendCommand("mute 1");
 
-				sendCommand("seek " + value + " 2");
+				sendCommand(VLCCommand.SET_TIME + " " + value);
 
 				if (paused) {
 
@@ -413,7 +413,7 @@ public class MPlayerInstance {
 
 				// sendCommand("mute 0");
 
-				sendCommand("get_time_pos");
+				sendCommand(VLCCommand.GET_TIME);
 			}
 		}
 	}

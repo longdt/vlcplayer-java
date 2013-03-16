@@ -83,7 +83,7 @@ public class VLCPlayer {
             }
             else if (inputLine.startsWith(VLCCommand.SET_TIME)) {
                 inputLine = inputLine.substring(VLCCommand.SET_TIME.length() + 1);
-                mediaPlayer.setTime(Long.parseLong(inputLine));
+                mediaPlayer.setTime(Long.parseLong(inputLine) * 1000);
             }
             else if (inputLine.startsWith(VLCCommand.SET_MUTE)) {
                 inputLine = inputLine.substring(VLCCommand.SET_MUTE.length() + 1);
