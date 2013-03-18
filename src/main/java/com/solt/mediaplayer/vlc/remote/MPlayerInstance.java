@@ -645,7 +645,7 @@ public class MPlayerInstance {
 			mPlayerProcess.destroy();
 		}
 
-		killProcesses(true);
+//		killProcesses(true);
 
 		stop_sem.reserve();
 	}
