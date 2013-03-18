@@ -103,7 +103,7 @@ public class VLCPlayer {
             }
             else if (inputLine.equalsIgnoreCase(VLCCommand.GET_TIME)) {
                 long time = mediaPlayer.getTime();
-                System.out.println(VLCCommand.ANS_TIME + " " + time);
+                System.out.println(VLCCommand.ANS_TIME + " " + time / 1000f);
             } else if (inputLine.equalsIgnoreCase(VLCCommand.GET_VOLUME)) {
             	int volume = mediaPlayer.getVolume();
             	System.out.println(VLCCommand.ANS_VOLUME + " " + volume);
