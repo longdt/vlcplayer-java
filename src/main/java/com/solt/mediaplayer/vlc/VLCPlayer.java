@@ -24,6 +24,7 @@ import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
  */
 public class VLCPlayer {
 	private EmbeddedMediaPlayer mediaPlayer;
+	private MediaPlayerFactory playerFactory;
 	
     public VLCPlayer(int canvasId) throws Exception {
     	this(canvasId, null);
@@ -33,7 +34,7 @@ public class VLCPlayer {
  
         //Lifted pretty much out of the VLCJ code
     	LibVlc libvlc = LibVlcFactory.factory().synchronise().log().create();
-    	MediaPlayerFactory playerFactory = new MediaPlayerFactory(libvlc, "--no-video-title");
+    	playerFactory = new MediaPlayerFactory(libvlc, "--no-video-title");
     	mediaPlayer = playerFactory.newEmbeddedMediaPlayer();
 
         mediaPlayer.setVideoSurface(ComponentIdVideoSurface.create(canvasId));
@@ -118,6 +119,8 @@ public class VLCPlayer {
             }
              
             else if (inputLine.equalsIgnoreCase(VLCCommand.CLOSE)) {
+            	mediaPlayer.release();
+            	playerFactory.release();
                 System.exit(0);
             }
             else {
