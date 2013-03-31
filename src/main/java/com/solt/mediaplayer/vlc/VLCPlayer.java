@@ -58,10 +58,9 @@ public class VLCPlayer {
         		System.out.println(VLCCommand.STATUS_LENGTH + " " + (newLength / 1000f));
         	}
         });
-        handleRequest();
     }
     
-    private void handleRequest() throws NumberFormatException, IOException {
+    public void handleRequest() throws NumberFormatException, IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         String inputLine;
  
@@ -119,14 +118,18 @@ public class VLCPlayer {
             }
              
             else if (inputLine.equalsIgnoreCase(VLCCommand.CLOSE)) {
-            	mediaPlayer.release();
-            	playerFactory.release();
-                System.exit(0);
+            	shudown();
+            	System.exit(0);
             }
             else {
                 System.err.println("unknown command: ." + inputLine + ".");
             }
         }
+    }
+    
+    public void shudown() {
+    	playerFactory.release();
+    	mediaPlayer.release();
     }
     
 	public void setVideoSurface(long componentId) {
@@ -137,19 +140,24 @@ public class VLCPlayer {
     	new NativeDiscovery().discover();
         PrintStream stream = null;
         String media = null;
+        VLCPlayer player = null;
         try {
             stream = new PrintStream(new File("vlcErr.txt"));
             System.setErr(stream); //This is important, need to direct error stream somewhere
             if (args.length == 2) {
             	media = args[1];
             }
-            new VLCPlayer(Integer.parseInt(args[0]), media);
+            player = new VLCPlayer(Integer.parseInt(args[0]), media);
+            player.handleRequest();
         }
         catch (Exception ex) {
             ex.printStackTrace();
         }
         finally {
-            stream.close();
+        	if (stream != null) {
+        		stream.close();
+        	}
+        	System.exit(1);
         }
     }
 }
