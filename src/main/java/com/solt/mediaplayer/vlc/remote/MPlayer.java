@@ -12,10 +12,6 @@ import com.solt.mediaplayer.vlc.VLCCommand;
 
 public abstract class MPlayer extends BaseMediaPlayer {
 
-	public static void initialise() {
-		MPlayerInstance.initialise();
-	}
-
 	private List<String> output;
 	
 	private volatile boolean disposed = false;
