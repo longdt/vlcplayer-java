@@ -23,7 +23,6 @@ import com.solt.mediaplayer.vlc.remote.MediaPlaybackState;
 public class MPlayerFrame extends MPlayer {
 	
 	private Display display;
-	private Composite parent;
 	private Composite outerPlayerFrame;
 	private MPlayerRendererCanvas rendererFrame;
 	
@@ -33,10 +32,8 @@ public class MPlayerFrame extends MPlayer {
 	int displayHeight = 0;
 	
 		
-	public MPlayerFrame(Composite parent) {
+	public MPlayerFrame(Shell parent) {
 		display = Display.getCurrent();
-		
-		this.parent = parent;
 		
 		/*
 		fullscreenShell = new Shell(display,SWT.NO_TRIM | SWT.ON_TOP);
@@ -50,7 +47,7 @@ public class MPlayerFrame extends MPlayer {
 		//outerPlayerFrame.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
 		
 //		outerPlayerFrame.setLayout(new AspectRatioLayout());		
-		rendererFrame = new MPlayerRendererCanvas(outerPlayerFrame,SWT.NONE);	
+		rendererFrame = new MPlayerRendererCanvas(outerPlayerFrame);	
 		rendererFrame.setBackground(display.getSystemColor(SWT.COLOR_BLACK));
 		//rendererFrame.setForeground(display.getSystemColor(SWT.COLOR_RED));
 		
@@ -61,6 +58,7 @@ public class MPlayerFrame extends MPlayer {
 			
 			
 			public void widgetDisposed(DisposeEvent arg0) {
+				rendererFrame.release();
 				dispose();
 			}
 		});
