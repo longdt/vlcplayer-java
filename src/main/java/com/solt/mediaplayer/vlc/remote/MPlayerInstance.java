@@ -21,36 +21,21 @@
 package com.solt.mediaplayer.vlc.remote;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.solt.mediaplayer.util.AESemaphore;
-import com.solt.mediaplayer.util.ShellUtilityFinder;
 import com.solt.mediaplayer.util.SimpleTimer;
 import com.solt.mediaplayer.util.SystemTime;
-import com.solt.mediaplayer.util.Utils;
 import com.solt.mediaplayer.vlc.VLCCommand;
-import com.solt.mediaplayer.vlc.fonts.Font;
 
 public class MPlayerInstance {
-	private static final boolean LOG = true;
-
-	private static int LISTEN_PORT;
-
-	public static void initialise() {
-		//killProcesses(false);
-	}
-
-	public static void setBinaryPath(String path) {
-
-	}
+	private static final boolean LOG = false;
 
 	private volatile Process mPlayerProcess;
 
@@ -122,13 +107,10 @@ public class MPlayerInstance {
 				mPlayerProcess = RemotePlayerFactory.startSecondJVM(componentId, fileOrUrl);
 
 				InputStream stdOut = mPlayerProcess.getInputStream();
-				InputStream stdErr = mPlayerProcess.getErrorStream();
 				OutputStream stdIn = mPlayerProcess.getOutputStream();
 
 				final BufferedReader brStdOut = new BufferedReader(
 						new InputStreamReader(stdOut));
-				final BufferedReader brStdErr = new BufferedReader(
-						new InputStreamReader(stdErr));
 				final PrintWriter pwStdIn = new PrintWriter(
 						new OutputStreamWriter(stdIn));
 
@@ -137,8 +119,7 @@ public class MPlayerInstance {
 						try {
 							String line;
 							while ((line = brStdOut.readLine()) != null) {
-								if (LOG && !line.startsWith("A:")) {
-
+								if (LOG) {
 									System.out.println("<- " + line);
 								}
 								output_consumer.consume(line);
@@ -150,26 +131,6 @@ public class MPlayerInstance {
 				};
 				stdOutReader.setDaemon(true);
 				stdOutReader.start();
-
-				Thread stdErrReader = new Thread("Player Console Err Reader") {
-					public void run() {
-						try {
-							String line;
-							while ((line = brStdErr.readLine()) != null) {
-
-								if (LOG && !line.startsWith("A:")) {
-
-									System.err.println("<- " + line);
-								}
-	//							output_consumer.consume(line);
-							}
-						} catch (Exception e) {
-							// e.printStackTrace();
-						}
-					};
-				};
-				stdErrReader.setDaemon(true);
-				stdErrReader.start();
 
 				Thread stdInWriter = new Thread("Player Console In Writer") {
 					public void run() {
@@ -645,88 +606,7 @@ public class MPlayerInstance {
 			mPlayerProcess.destroy();
 		}
 
-//		killProcesses(true);
-
 		stop_sem.reserve();
-	}
-
-	private static void killProcesses(boolean delay) {
-		if (Utils.isMacOSX()) {
-
-			String process_name = null;
-
-			if (LOG) {
-				System.out.println("running killall -9 " + process_name);
-			}
-
-			if (delay) {
-
-				try {
-					Thread.sleep(250);
-
-				} catch (Throwable e) {
-				}
-			}
-
-			runCommand(new String[] { "killall", "-9", process_name });
-
-		} else if (Utils.isWindows()) {
-
-			String process_name = null;
-
-			int pos = process_name.lastIndexOf(".");
-
-			if (pos != -1) {
-
-				process_name = process_name.substring(0, pos);
-			}
-
-			if (LOG) {
-				System.out.println("running tskill " + process_name);
-			}
-
-			if (delay) {
-
-				try {
-					Thread.sleep(250);
-
-				} catch (Throwable e) {
-				}
-			}
-
-			runCommand(new String[] { "cmd", "/C", "tskill", process_name });
-		}
-	}
-
-	private static void runCommand(String[] command) {
-		try {
-			if (!Utils.isWindows()) {
-
-				command[0] = findCommand(command[0]);
-			}
-
-			Runtime.getRuntime().exec(command).waitFor();
-
-		} catch (Throwable e) {
-
-			e.printStackTrace();
-		}
-	}
-
-	private static String findCommand(String name) {
-		final String[] locations = { "/bin", "/usr/bin" };
-
-		for (String s : locations) {
-
-			File f = new File(s, name);
-
-			if (f.exists() && f.canRead()) {
-
-				return (f.getAbsolutePath());
-			}
-		}
-
-		return (name);
 	}
 
 	protected interface OutputConsumer {
