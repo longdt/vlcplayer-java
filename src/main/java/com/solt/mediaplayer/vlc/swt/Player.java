@@ -13,7 +13,6 @@ import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -24,13 +23,12 @@ import org.eclipse.swt.widgets.Shell;
 import com.solt.mediaplayer.util.Utils;
 import com.solt.mediaplayer.vlc.remote.Language;
 import com.solt.mediaplayer.vlc.remote.LanguageSource;
-import com.solt.mediaplayer.vlc.remote.MPlayer;
 import com.solt.mediaplayer.vlc.remote.MediaPlaybackState;
 import com.solt.mediaplayer.vlc.remote.MetaDataListener;
 import com.solt.mediaplayer.vlc.remote.StateListener;
 
 public class Player {
-	private Composite parent;
+	private Shell parent;
 	private Display display;
 	private MPlayerFrame playerFrame;
 	private FullScreenControls controls;
@@ -51,17 +49,17 @@ public class Player {
 	private Listener keyListener;
 	private boolean autoResize;
 
-	public Player(final Composite _parent) {
+	public Player(final Shell _parent) {
 
 		parent = _parent;
 		display = parent.getDisplay();
 		playerFrame = new MPlayerFrame(parent);
-		controls = new FullScreenControls(playerFrame, parent.getShell());
+		controls = new FullScreenControls(playerFrame, parent);
 		// playerFrame.setControls(controls.getRealShell());
 		controlsSize = controls.getShell().getBounds();
 
 		bufferingControls = new BufferingControls(playerFrame,
-				parent.getShell());
+				parent);
 
 		Color white = display.getSystemColor(SWT.COLOR_WHITE);
 		Color black = display.getSystemColor(SWT.COLOR_BLACK);
@@ -211,7 +209,7 @@ public class Player {
 
 		playerFrame.addListener(SWT.MouseExit, new Listener() {
 			public void handleEvent(Event evt) {
-				Rectangle bounds = parent.getShell().getBounds();
+				Rectangle bounds = parent.getBounds();
 				if (evt.x > 0 && evt.y > 0 && evt.x < bounds.width
 						&& evt.y < bounds.height) {
 					controls.setFocus();
@@ -258,8 +256,7 @@ public class Player {
 								playerFrame.setFullscreen(false);
 							}
 							if (playerFrame.getDurationInSecs() == 0) {
-								MessageBox mb = new MessageBox(parent
-										.getShell(), SWT.OK | SWT.ERROR);
+								MessageBox mb = new MessageBox(parent, SWT.OK | SWT.ERROR);
 								mb.setText("Error");
 								File f = new File(playerFrame.getOpenedFile());
 								if (!(f.exists() && f.isFile())) {
@@ -308,7 +305,7 @@ public class Player {
 					break;
 				case 'w':
 					if ((event.stateMask & SWT.COMMAND) != 0) {
-						parent.getShell().close();
+						parent.close();
 					}
 					break;
 
@@ -318,7 +315,7 @@ public class Player {
 		parent.addListener(SWT.KeyDown, keyListener);
 		controls.getShell().addListener(SWT.KeyDown, keyListener);
 
-		parent.getShell().addListener(SWT.Dispose, new Listener() {
+		parent.addListener(SWT.Dispose, new Listener() {
 			public void handleEvent(Event arg0) {
 				if (hiddenCursor != null && !hiddenCursor.isDisposed()) {
 					hiddenCursor.dispose();
@@ -343,7 +340,7 @@ public class Player {
 			public void run() {
 				if (parent.isDisposed())
 					return;
-				Shell s = parent.getShell();
+				Shell s = parent;
 				Rectangle client = s.getClientArea();
 				Rectangle bounds = s.getBounds();
 
@@ -665,7 +662,6 @@ public class Player {
 	public static void play(final Shell shell, String fileOrUrl)
 			throws Exception {
 
-		MPlayer.initialise();
 
 		// ResourceBundle bundle =
 		// ResourceBundle.getBundle(

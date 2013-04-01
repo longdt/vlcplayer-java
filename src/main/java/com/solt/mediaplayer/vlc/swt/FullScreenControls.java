@@ -1166,12 +1166,12 @@ public class FullScreenControls {
 				event.doit = false;
 			}
 		};
-		
-		parent.addListener(SWT.Close, new Listener() {
-			public void handleEvent(Event arg0) {
-				close();
-			}
-		});
+// TODO remove this code
+//		parent.addListener(SWT.Close, new Listener() {
+//			public void handleEvent(Event arg0) {
+//				close();
+//			}
+//		});
 		shell.addListener(SWT.Close, antiCloseListener);
 		
 		shell.setAlpha(TARGET_ALPHA);
