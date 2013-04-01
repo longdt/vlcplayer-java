@@ -39,11 +39,7 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
-import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.PaletteData;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -110,7 +106,6 @@ public class DemoVlcjTube {
   private Canvas videoSurfaceCanvas;
   private CanvasVideoSurface videoSurface;
   private Cursor emptyCursor;
-
   /**
    * Native media player components.
    */
@@ -245,12 +240,12 @@ public class DemoVlcjTube {
    * Create an empty cursor.
    */
   private void createEmptyCursor() {
-    Color white = display.getSystemColor(SWT.COLOR_WHITE);
-    Color black = display.getSystemColor(SWT.COLOR_BLACK);
-    PaletteData palette = new PaletteData(new RGB[] { white.getRGB(), black.getRGB() });
-    ImageData sourceData = new ImageData(16, 16, 1, palette);
-    sourceData.transparentPixel = 0;
-    emptyCursor = new Cursor(display, sourceData, 0, 0);
+//    Color white = display.getSystemColor(SWT.COLOR_WHITE);
+//    Color black = display.getSystemColor(SWT.COLOR_BLACK);
+//    PaletteData palette = new PaletteData(new RGB[] { white.getRGB(), black.getRGB() });
+//    ImageData sourceData = new ImageData(16, 16, 1, palette);
+//    sourceData.transparentPixel = 0;
+//    emptyCursor = new Cursor(display, sourceData, 0, 0);
   }
   
   /**

@@ -2,6 +2,8 @@ package com.solt.mediaplayer.vlc.swt;
 
 import java.awt.Canvas;
 import java.awt.Frame;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
@@ -14,6 +16,7 @@ import com.solt.mediaplayer.vlc.remote.RemotePlayerFactory;
 
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 import uk.co.caprica.vlcj.discovery.NativeDiscovery;
+import uk.co.caprica.vlcj.runtime.windows.WindowsCanvas;
 
 public class DemoPlayer {
 	protected Shell shell;
@@ -58,7 +61,13 @@ public class DemoPlayer {
 		shell.setText("SWT Application");
 		Composite videoComposite = new Composite(shell, SWT.EMBEDDED | SWT.NO_BACKGROUND);
 		Frame videoFrame = SWT_AWT.new_Frame(videoComposite);
-		Canvas videoSurface = new Canvas();
+		WindowsCanvas videoSurface = new WindowsCanvas();
+		videoSurface.addMouseMotionListener(new MouseAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				System.out.println("mouse move");
+			}
+		});
 		videoSurface.setBackground(java.awt.Color.black);
 		videoFrame.add(videoSurface);
 		videoComposite.setBounds(0, 0, 864, 442);
