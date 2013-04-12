@@ -3,6 +3,7 @@ package com.solt.mediaplayer.vlc.remote;
 import com.solt.mediaplayer.vlc.VLCPlayer;
 import com.sun.jna.Native;
 import java.awt.Canvas;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +54,11 @@ public class RemotePlayerFactory {
         String jnaLibPath = System.getProperty("jna.library.path");
         if (jnaLibPath != null) {
         	cmdList.add("-Djna.library.path=" + jnaLibPath);
+        } else {
+        	File vlc = new File("VLC");
+        	if (vlc.isDirectory()) {
+        		cmdList.add("-Djna.library.path=" + vlc.getAbsolutePath());
+        	}
         }
         cmdList.add(VLCPlayer.class.getName());
         cmdList.add(Long.toString(componentId));
