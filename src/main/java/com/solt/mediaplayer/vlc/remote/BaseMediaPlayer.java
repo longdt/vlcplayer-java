@@ -393,7 +393,7 @@ public abstract class BaseMediaPlayer implements MediaPlayer,MetaDataListener,St
 	
 	
 	public void stop() {
-		if(currentState == MediaPlaybackState.Playing || currentState == MediaPlaybackState.Paused) {
+		if(currentState == MediaPlaybackState.Opening || currentState == MediaPlaybackState.Playing || currentState == MediaPlaybackState.Paused) {
 			doStop();
 		}		
 	}
