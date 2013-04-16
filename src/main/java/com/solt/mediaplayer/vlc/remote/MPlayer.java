@@ -18,7 +18,7 @@ public abstract class MPlayer extends BaseMediaPlayer {
 	
 	private Thread outputParser;
 		
-	
+	private volatile int timeWait = 1000;
 	private boolean firstLengthReceived = false;
 	private boolean firstVolumeReceived = false;
 	
@@ -36,7 +36,7 @@ public abstract class MPlayer extends BaseMediaPlayer {
 								line = output.remove(0);	
 																
 							} else {
-								output.wait(1000);
+								output.wait(timeWait);
 								if (output.isEmpty()) {
 									line = null;
 								} else {
@@ -58,7 +58,7 @@ public abstract class MPlayer extends BaseMediaPlayer {
 								
 								e.printStackTrace();
 							}
-						} else {
+						} else if (timeWait != 0) {
 							stateChanged(MediaPlaybackState.Buffering);
 							buffering = true;
 						}
@@ -400,6 +400,10 @@ public abstract class MPlayer extends BaseMediaPlayer {
 			doStop( false );
 			
 			instance = current_instance = new MPlayerInstance();
+			synchronized (output) {
+				timeWait = 1000;
+				output.notifyAll();
+			}
 		}
 		
 		reportNewState(MediaPlaybackState.Opening);
@@ -546,6 +550,7 @@ public abstract class MPlayer extends BaseMediaPlayer {
 		boolean	report_state ) 
 	{		
 		synchronized( this ){
+			timeWait = 0;
 			if ( current_instance != null ){
 				current_instance.doStop();
 				current_instance = null;

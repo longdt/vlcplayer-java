@@ -422,6 +422,7 @@ public class Player {
 
 	public void stop() {
 		playerFrame.stop();
+		bufferingControls.hide();
 	}
 
 	public void pause() {
