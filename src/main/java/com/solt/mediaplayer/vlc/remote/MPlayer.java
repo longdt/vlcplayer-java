@@ -27,6 +27,7 @@ public abstract class MPlayer extends BaseMediaPlayer {
 		outputParser = new Thread("MPlayer output parser") {
 			public void run() {
 				try {
+					boolean buffering = false;
 					while(!disposed) {
 						String line = null;
 						synchronized (output) {
@@ -35,20 +36,31 @@ public abstract class MPlayer extends BaseMediaPlayer {
 								line = output.remove(0);	
 																
 							} else {
-								output.wait();
+								output.wait(1000);
+								if (output.isEmpty()) {
+									line = null;
+								} else {
+									line = output.remove(0);
+								}
 							}
 						}
 						
 						if ( line != null ){
 							
 							//System.out.println(line);
-							
+							if (buffering) {
+								stateChanged(MediaPlaybackState.Continue);
+								buffering = false;
+							}
 							try{
 								parseOutput(line);
 							}catch( Throwable e ){
 								
 								e.printStackTrace();
 							}
+						} else {
+							stateChanged(MediaPlaybackState.Buffering);
+							buffering = true;
 						}
 					}
 				} catch (Throwable e) {

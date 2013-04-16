@@ -1,7 +1,7 @@
 package com.solt.mediaplayer.vlc.remote;
 
 public enum MediaPlaybackState {
-	Uninitialized,Opening,Playing,Paused,Stopped,Closed,Failed;
+	Uninitialized,Opening,Playing,Paused,Stopped,Closed,Failed, Buffering, Continue;
 	
 	private String details;
 	
