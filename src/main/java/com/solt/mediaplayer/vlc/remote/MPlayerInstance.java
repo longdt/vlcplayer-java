@@ -107,10 +107,13 @@ public class MPlayerInstance {
 				mPlayerProcess = RemotePlayerFactory.startSecondJVM(componentId, fileOrUrl);
 
 				InputStream stdOut = mPlayerProcess.getInputStream();
+				InputStream stdErr = mPlayerProcess.getErrorStream();
 				OutputStream stdIn = mPlayerProcess.getOutputStream();
 
 				final BufferedReader brStdOut = new BufferedReader(
 						new InputStreamReader(stdOut));
+				final BufferedReader brStdErr = new BufferedReader(
+						new InputStreamReader(stdErr));
 				final PrintWriter pwStdIn = new PrintWriter(
 						new OutputStreamWriter(stdIn));
 
@@ -131,6 +134,21 @@ public class MPlayerInstance {
 				};
 				stdOutReader.setDaemon(true);
 				stdOutReader.start();
+
+				Thread stdErrReader = new Thread("Player Console Err Reader") {
+					public void run() {
+						try {
+							String line;
+							while ((line = brStdErr.readLine()) != null) {
+								System.err.println("<- " + line);
+							}
+						} catch (Exception e) {
+							// e.printStackTrace();
+						}
+					};
+				};
+				stdErrReader.setDaemon(true);
+				stdErrReader.start();
 
 				Thread stdInWriter = new Thread("Player Console In Writer") {
 					public void run() {
@@ -224,7 +242,7 @@ public class MPlayerInstance {
 		}
 	}
 
-	protected void sendCommand(String cmd, boolean pauseKeep) {
+	protected void sendCommand(String cmd) {
 		synchronized (this) {
 
 			if (stopped) {
@@ -232,8 +250,7 @@ public class MPlayerInstance {
 				return;
 			}
 
-			commands.add((pauseKeep && paused ? "pausing_keep_force " : "")
-					+ cmd);
+			commands.add(cmd);
 
 			command_sem.release();
 		}
@@ -245,22 +262,19 @@ public class MPlayerInstance {
 		}
 	}
 
-	protected void sendCommand(String cmd) {
-		sendCommand(cmd, true);
-	}
 
 	protected void initialised() {
 		synchronized (this) {
 
 			// sendCommand("pause");
 
-			sendCommand("get_property LENGTH");
-
-			sendCommand("get_property SUB");
-
-			sendCommand("get_property ASPECT");
-
-			sendCommand("get_property WIDTH");
+//			sendCommand("get_property LENGTH");
+//
+//			sendCommand("get_property SUB");
+//
+//			sendCommand("get_property ASPECT");
+//
+//			sendCommand("get_property WIDTH");
 
 			sendCommand(VLCCommand.GET_VOLUME);
 
@@ -303,7 +317,7 @@ public class MPlayerInstance {
 
 						// System.out.println("pausedStateChanging() sending pause");
 
-						sendCommand("pause", false);
+						sendCommand("pause");
 
 						SimpleTimer.schedule(this, delay + pending_sleeps);
 					}
@@ -324,7 +338,7 @@ public class MPlayerInstance {
 
 //			pausedStateChanging();
 
-			sendCommand("pause", false);
+			sendCommand("pause");
 
 			return (true);
 		}
@@ -342,7 +356,7 @@ public class MPlayerInstance {
 
 //			pausedStateChanging();
 
-			sendCommand("pause", false);
+			sendCommand("pause");
 
 			return (true);
 		}
@@ -373,7 +387,7 @@ public class MPlayerInstance {
 
 				if (paused) {
 
-					sendCommand("frame_step", false);
+					sendCommand("frame_step");
 				}
 
 				// sendCommand("mute 0");
@@ -506,7 +520,7 @@ public class MPlayerInstance {
 
 					redraw_last_frame = now;
 
-					sendCommand("frame_step", false);
+					sendCommand("frame_step");
 				}
 			} else {
 
@@ -514,7 +528,7 @@ public class MPlayerInstance {
 
 				redraw_last_frame = now;
 
-				sendCommand("frame_step", false);
+				sendCommand("frame_step");
 
 				redrawing = true;
 

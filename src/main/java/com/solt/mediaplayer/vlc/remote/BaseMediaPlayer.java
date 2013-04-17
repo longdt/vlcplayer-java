@@ -311,7 +311,9 @@ public abstract class BaseMediaPlayer implements MediaPlayer,MetaDataListener,St
 
 
 	public void stateChanged(MediaPlaybackState newState) {
-		currentState = newState;
+		if (newState != MediaPlaybackState.Buffering && newState != MediaPlaybackState.Continue) {
+			currentState = newState;
+		}
 		synchronized (stateListeners) {
 			for(StateListener listener : stateListeners) {
 				listener.stateChanged( newState);

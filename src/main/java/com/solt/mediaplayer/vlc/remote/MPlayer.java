@@ -440,6 +440,10 @@ public abstract class MPlayer extends BaseMediaPlayer {
 	public void 
 	doPause() 
 	{
+		synchronized (output) {
+			timeWait = 0;
+			output.notifyAll();
+		}
 		MPlayerInstance instance = getCurrentInstance();
 		
 		if ( instance != null ){
@@ -454,6 +458,10 @@ public abstract class MPlayer extends BaseMediaPlayer {
 	public void 
 	doResume() 
 	{
+		synchronized (output) {
+			timeWait = 1000;
+			output.notifyAll();
+		}
 		MPlayerInstance instance = getCurrentInstance();
 		
 		if ( instance != null ){
@@ -550,12 +558,12 @@ public abstract class MPlayer extends BaseMediaPlayer {
 		boolean	report_state ) 
 	{		
 		synchronized( this ){
-			timeWait = 0;
 			if ( current_instance != null ){
 				current_instance.doStop();
 				current_instance = null;
 			}
 			synchronized (output) {
+				timeWait = 0;
 				output.clear();
 				output.notifyAll();
 			}	
