@@ -399,8 +399,12 @@ public class Player {
 			}
 		});
 	}
-
+	
 	public void open(String file, boolean stream_mode) {
+		open(file, null, stream_mode);
+	}
+
+	public void open(String file, String sub, boolean stream_mode) {
 
 		bufferingControls.hide();
 		if (!stream_mode) {
@@ -410,6 +414,9 @@ public class Player {
 		controls.setPlayEnabled(true);
 		controls.setSeekMaxTime(stream_mode ? 0 : -1);
 		playerFrame.open(file);
+		if (sub != null) {
+			playerFrame.loadSubtitlesFile(sub);
+		}
 	}
 
 	public void prepare() {
