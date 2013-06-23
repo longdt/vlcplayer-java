@@ -1,5 +1,6 @@
 package com.solt.mediaplayer.vlc.swt;
 
+import java.awt.Canvas;
 import java.awt.Frame;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -16,15 +17,16 @@ import org.eclipse.swt.widgets.Listener;
 
 import uk.co.caprica.vlcj.runtime.windows.WindowsCanvas;
 
+import com.solt.mediaplayer.util.Utils;
 import com.sun.jna.Native;
 
 public class MPlayerRendererCanvas extends Composite implements MPlayerRendererInterface {
-	private WindowsCanvas videoSurfaceCanvas;
+	private Canvas videoSurfaceCanvas;
 	private Frame videoFrame;
 	
 	public MPlayerRendererCanvas(Composite parent) {
 		super(parent, SWT.EMBEDDED);
-		videoSurfaceCanvas = new WindowsCanvas();
+		videoSurfaceCanvas = Utils.isLinux() ? new Canvas() : new WindowsCanvas();
 		setLayoutData(new GridData(GridData.FILL_BOTH));
 	    videoFrame = SWT_AWT.new_Frame(this);
 	    videoSurfaceCanvas.setBackground(java.awt.Color.black);
@@ -32,7 +34,9 @@ public class MPlayerRendererCanvas extends Composite implements MPlayerRendererI
 	}
 	
 	public void release() {
-		videoSurfaceCanvas.release();
+		if (videoSurfaceCanvas instanceof WindowsCanvas) {
+			((WindowsCanvas)videoSurfaceCanvas).release();
+		}
 		videoFrame.dispose();
 		dispose();
 	}

@@ -38,6 +38,10 @@ public class Utils {
 	public static boolean isMacOSX() {
 		return os != null && os.startsWith("mac os x");
 	}
+	
+	public static boolean isLinux() {
+		return os != null && os.equals("linux");
+	}
 
 	public static int pixelsToPoint(int pixels, int dpi) {
 		int ret = (int) Math.round((pixels * 72.0) / dpi);
