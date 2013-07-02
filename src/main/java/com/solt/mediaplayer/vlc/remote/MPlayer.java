@@ -214,6 +214,28 @@ public abstract class MPlayer extends BaseMediaPlayer {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		} else if (line.startsWith(VLCCommand.ANS_SUB_FILE)) {
+			String fileName = line.substring(VLCCommand.ANS_SUB_FILE.length() + 1);
+			language = new Language(LanguageSource.FILE, String.valueOf(fileName.hashCode()));
+			try {
+				File f = new File(fileName);
+				language.setSourceInfo(f.getAbsolutePath());
+				fileName = f.getName();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			language.setName(fileName);
+			Language parsed = language;
+			reportParsingDone();
+			MPlayerInstance instance = getCurrentInstance();
+			
+			if ( instance != null ){
+
+				if(instance.activateNextSubtitleLoaded) {
+					instance.activateNextSubtitleLoaded = false;
+					setSubtitles(parsed);
+				}
+			}
 		} else
 		if(line.startsWith(ID_AUDIO_ID)) {
 			reportParsingDone();
@@ -372,16 +394,14 @@ public abstract class MPlayer extends BaseMediaPlayer {
 	}
 
 	private void reportParsingDone() {
-		if(parsingLanguage) {
-			if(isAudioTrack) {
-				reportFoundAudioTrack(language);
-			} else {
-				reportFoundSubtitle(language);
-			}
-			language = null;
-			parsingLanguage = false;
-			isAudioTrack = false;
+		if(isAudioTrack) {
+			reportFoundAudioTrack(language);
+		} else {
+			reportFoundSubtitle(language);
 		}
+		language = null;
+		parsingLanguage = false;
+		isAudioTrack = false;
 	}
 	
 	public abstract long getComponentId();

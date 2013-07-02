@@ -115,9 +115,15 @@ public class VLCPlayer {
             } else if (inputLine.startsWith(VLCCommand.LOAD_SUB)) {
             	inputLine = inputLine.substring(VLCCommand.LOAD_SUB.length() + 1);
             	mediaPlayer.setSubTitleFile(new File(inputLine));
-            }
-             
-            else if (inputLine.equalsIgnoreCase(VLCCommand.CLOSE)) {
+            	System.out.println(VLCCommand.ANS_SUB_FILE + " "+ inputLine);
+            } else if (inputLine.startsWith(VLCCommand.SET_SUB)) {
+            	inputLine = inputLine.substring(VLCCommand.SET_SUB.length() + 1);
+            	if (inputLine.equals("-1")) {
+            		mediaPlayer.setSpu(0);
+            	} else {
+            		mediaPlayer.setSubTitleFile(new File(inputLine));
+            	}
+            } else if (inputLine.equalsIgnoreCase(VLCCommand.CLOSE)) {
             	shudown();
             	System.exit(0);
             }

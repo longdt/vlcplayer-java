@@ -635,7 +635,7 @@ public class Player {
 		Shell shell = new Shell();
 		shell.setSize(880, 480);
 		shell.setText("SWT Application");
-		play(shell, "D:\\Music\\Gockhuyet_kienza.avi");
+		play(shell, "/media/workspace/movies/Life.of.Pi.2012.720p.WEB-DL.DD5.1.H.264-HD4FUN.mkv");
 	}
 
 }

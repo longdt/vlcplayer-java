@@ -48,4 +48,8 @@ public class VLCCommand {
 	public static final String ANS_DIMENSION = "ans_dimension";
 	
 	public static final String LOAD_SUB = "loadSub";
+
+	public static final String ANS_SUB_FILE = "ans_subfile";
+	
+	public static final String SET_SUB = "setSub";
 }

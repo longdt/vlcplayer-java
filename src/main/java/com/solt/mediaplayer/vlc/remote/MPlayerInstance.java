@@ -562,22 +562,13 @@ public class MPlayerInstance {
 
 	protected String setSubtitles(Language language) {
 		synchronized (this) {
-
-			String langId;
-			String commandName = "sub_demux ";
-			if (language != null) {
-				langId = language.getId();
-				if (language.getSource() == LanguageSource.FILE) {
-					commandName = "sub_file ";
-				}
-				sendCommand("set_property sub_visibility 1");
+			if (language == null) {
+				sendCommand(VLCCommand.SET_SUB + " -1");
+				return null;
 			} else {
-				sendCommand("set_property sub_visibility 0");
-				return (null);
+				sendCommand(VLCCommand.SET_SUB + " " + language.getSourceInfo());
 			}
-
-			sendCommand(commandName + langId);
-			return (langId);
+			return language.getId();
 		}
 	}
 

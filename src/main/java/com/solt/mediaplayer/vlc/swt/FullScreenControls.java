@@ -41,7 +41,7 @@ public class FullScreenControls {
 	
 	
 
-	private static final String PLAYER_INFO_URL = "http://www.vuze.com/emp_info.start";
+	private static final String PLAYER_INFO_URL = "http://sharephim.vn";
 	
 	//Shel alpha
 	private static final int TARGET_ALPHA = 90 * 255 / 100;
