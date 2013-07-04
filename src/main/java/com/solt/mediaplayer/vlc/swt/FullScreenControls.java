@@ -366,17 +366,7 @@ public class FullScreenControls {
 					
 					for(Language l : subtitles) {						
 						MenuItem item = new MenuItem(subtitlesMenu, SWT.RADIO);
-						String label = "";
-						if(l.getLanguage() != null) {
-							label = l.getLanguage().getDisplayLanguage();
-						} else {
-							if(l.getId() != null) {
-								label = "Undefined ";
-							}
-						}
-						if(l.getName() != null) {
-							label += " (" + l.getName() + ")";
-						}
+						String label = l.getName() != null ? l.getName() : "";
 						item.setText(label);
 						item.setData(l);
 						

@@ -6,6 +6,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.util.List;
+
+import org.json.simple.JSONObject;
 
 import com.solt.mediaplayer.vlc.remote.ComponentIdVideoSurface;
 
@@ -15,6 +18,7 @@ import uk.co.caprica.vlcj.discovery.NativeDiscovery;
 import uk.co.caprica.vlcj.player.MediaPlayer;
 import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.MediaPlayerFactory;
+import uk.co.caprica.vlcj.player.TrackDescription;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
  
@@ -43,9 +47,22 @@ public class VLCPlayer {
         }
         mediaPlayer.addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
         	
-        	@Override
+        	@SuppressWarnings("unchecked")
+			@Override
         	public void playing(MediaPlayer mediaPlayer) {
         		System.out.println(VLCCommand.STATUS_PLAYING);
+        		List<TrackDescription> spus = mediaPlayer.getSpuDescriptions();
+        		JSONObject subs = new JSONObject();
+        		for (TrackDescription td : spus) {
+        			if (td.id() == -1) {
+        				continue;
+        			}
+        			subs.put(td.id() - 1, td.description());
+        		}
+        		if (!subs.isEmpty()) {
+        			subs.put(VLCCommand.SUB_STATE, mediaPlayer.getSpu());
+        			System.out.println(VLCCommand.STATUS_SUBS + " " + subs.toString());
+        		}
         	}
         	
         	@Override
@@ -118,9 +135,10 @@ public class VLCPlayer {
             	System.out.println(VLCCommand.ANS_SUB_FILE + " "+ inputLine);
             } else if (inputLine.startsWith(VLCCommand.SET_SUB)) {
             	inputLine = inputLine.substring(VLCCommand.SET_SUB.length() + 1);
-            	if (inputLine.equals("-1")) {
-            		mediaPlayer.setSpu(0);
-            	} else {
+            	try {
+            		int subId = Integer.parseInt(inputLine);
+            		mediaPlayer.setSpu(subId);
+            	} catch (NumberFormatException e) {
             		mediaPlayer.setSubTitleFile(new File(inputLine));
             	}
             } else if (inputLine.equalsIgnoreCase(VLCCommand.CLOSE)) {

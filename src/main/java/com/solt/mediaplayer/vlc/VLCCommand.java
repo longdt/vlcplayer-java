@@ -52,4 +52,8 @@ public class VLCCommand {
 	public static final String ANS_SUB_FILE = "ans_subfile";
 	
 	public static final String SET_SUB = "setSub";
+
+	public static final String STATUS_SUBS = "st_subs";
+
+	public static final Object SUB_STATE = "st_substate";
 }

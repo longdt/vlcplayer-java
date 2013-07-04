@@ -4,8 +4,14 @@ package com.solt.mediaplayer.vlc.remote;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 import com.solt.mediaplayer.vlc.VLCCommand;
 
@@ -236,6 +242,20 @@ public abstract class MPlayer extends BaseMediaPlayer {
 					setSubtitles(parsed);
 				}
 			}
+		} else if (line.startsWith(VLCCommand.STATUS_SUBS)) {
+			JSONObject subStats = (JSONObject) JSONValue.parse(line.substring(VLCCommand.STATUS_SUBS.length() + 1));
+			String state = String.valueOf(subStats.remove(VLCCommand.SUB_STATE));
+			Map<String, String> subs = new TreeMap<String, String>(subStats);
+			for (Entry<String, String> entry : subs.entrySet()) {
+				language = new Language(LanguageSource.STREAM, entry.getKey());
+				language.setName(entry.getValue());
+				Language parsed = language;
+				reportParsingDone();
+				if (entry.getKey().equals(state)) {
+					setSubtitles(parsed);
+				}
+			}
+			
 		} else
 		if(line.startsWith(ID_AUDIO_ID)) {
 			reportParsingDone();

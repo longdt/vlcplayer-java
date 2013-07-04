@@ -563,10 +563,11 @@ public class MPlayerInstance {
 	protected String setSubtitles(Language language) {
 		synchronized (this) {
 			if (language == null) {
-				sendCommand(VLCCommand.SET_SUB + " -1");
+				sendCommand(VLCCommand.SET_SUB + " 0");
 				return null;
 			} else {
-				sendCommand(VLCCommand.SET_SUB + " " + language.getSourceInfo());
+				String sub = language.getSource() == LanguageSource.STREAM ? language.getId() : language.getSourceInfo();
+				sendCommand(VLCCommand.SET_SUB + " " + sub);
 			}
 			return language.getId();
 		}
