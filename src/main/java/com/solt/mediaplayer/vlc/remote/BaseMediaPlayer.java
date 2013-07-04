@@ -1,7 +1,9 @@
 package com.solt.mediaplayer.vlc.remote;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class BaseMediaPlayer implements MediaPlayer,MetaDataListener,StateListener,VolumeListener,PositionListener,TaskListener {
 
@@ -22,10 +24,9 @@ public abstract class BaseMediaPlayer implements MediaPlayer,MetaDataListener,St
 	private boolean				durationInSecsSet;
 	
 	private List<Language>		audioTracks;
-	private List<Language>		subtitles;
+	private Map<String, Language>		subtitles;
 	
 	private String				activeAudioTrackId = "0";
-	private LanguageSource		activeSubtitleSource = null;
 	private String				activeSubtitleId = null;
 	
 	private String 				openedFile;
@@ -52,11 +53,10 @@ public abstract class BaseMediaPlayer implements MediaPlayer,MetaDataListener,St
 		openedFile = null;
 		
 		audioTracks = new ArrayList<Language>();
-		subtitles = new ArrayList<Language>();
+		subtitles = new LinkedHashMap<String, Language>();
 		
 		activeAudioTrackId = "0";
 		activeSubtitleId = null;
-		activeSubtitleSource = null;
 				
 		durationInSecs 			= 0;
 		durationInSecsSet		= false;
@@ -262,7 +262,7 @@ public abstract class BaseMediaPlayer implements MediaPlayer,MetaDataListener,St
 	
 	public void foundSubtitle(Language language) {
 		synchronized (subtitles) {
-			subtitles.add(language);
+			subtitles.put(language.getId(), language);
 		}
 		synchronized (metaDataListeners) {
 			for(MetaDataListener listener : metaDataListeners) {
@@ -285,7 +285,6 @@ public abstract class BaseMediaPlayer implements MediaPlayer,MetaDataListener,St
 	public void activeSubtitleChanged(String subtitleId,LanguageSource source) {
 		//System.out.println(subtitleId + " " + source);
 		activeSubtitleId = subtitleId;
-		activeSubtitleSource = source;
 		synchronized (metaDataListeners) {
 			for(MetaDataListener listener : metaDataListeners) {
 				listener.activeSubtitleChanged(subtitleId,source);
@@ -294,15 +293,10 @@ public abstract class BaseMediaPlayer implements MediaPlayer,MetaDataListener,St
 	}
 	
 	
-	public Language getSubtitleByIdAndSource(String subtitleId,LanguageSource source) {
+	public Language getSubtitleById(String subtitleId) {
 		if(subtitleId == null) return null;
 		synchronized (subtitles) {
-			for(Language l : subtitles) {
-				if(l.id != null && l.id.equals(subtitleId) && l.source == source) {
-					return l;
-				}
-			}
-			return null;
+			return subtitles.get(subtitleId);
 		}
 		
 	}
@@ -477,13 +471,15 @@ public abstract class BaseMediaPlayer implements MediaPlayer,MetaDataListener,St
 	
 	
 	public Language[] getSubtitles() {
-		List<Language> result = new ArrayList<Language>();		
 		synchronized (subtitles) {			
-			for(Language language : subtitles) {
-				result.add(language);			
+			Language[] result = new Language[subtitles.size()];
+			int i = 0;
+			for(Language language : subtitles.values()) {
+				result[i] = language;
+				++i;
 			}			
+			return result;
 		}
-		return result.toArray(new Language[result.size()]);
 	}
 	
 	
@@ -497,7 +493,7 @@ public abstract class BaseMediaPlayer implements MediaPlayer,MetaDataListener,St
 	}
 	
 	public Language getActiveSubtitle() {
-		return getSubtitleByIdAndSource(activeSubtitleId,activeSubtitleSource);
+		return getSubtitleById(activeSubtitleId);
 	}
 
 }

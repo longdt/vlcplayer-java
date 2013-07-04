@@ -81,21 +81,9 @@ public abstract class MPlayer extends BaseMediaPlayer {
 		
 	}
 	
-	private static final String ANS_SUB = "ANS_SUB=";
-	
 	private static final String ANS_ASPECT = "ANS_ASPECT=";
 	
-	
 	private static final String ID_VIDEO_ASPECT = "ID_VIDEO_ASPECT=";
-	
-	private static final String ID_AUDIO_ID = "ID_AUDIO_ID=";
-	private static final String ID_SUBTITLE_ID = "ID_SUBTITLE_ID=";
-	
-	private static final String ID_AUDIO_TRACK = "ID_AUDIO_TRACK=";
-	private static final String ID_SUBTITLE_TRACK = "ID_SUBTITLE_TRACK=";
-	
-	private static final String ID_FILE_SUB_ID = "ID_FILE_SUB_ID=";
-	private static final String ID_FILE_SUB_FILENAME = "ID_FILE_SUB_FILENAME=";
 	
 	private static final String ID_EXIT = "ID_EXIT=";
 	
@@ -256,98 +244,7 @@ public abstract class MPlayer extends BaseMediaPlayer {
 				}
 			}
 			
-		} else
-		if(line.startsWith(ID_AUDIO_ID)) {
-			reportParsingDone();
-			try {
-				String audioId = line.substring(ID_AUDIO_ID.length());
-				language = new Language(LanguageSource.STREAM,""+audioId);
-				parsingLanguage = true;
-				isAudioTrack = true;
-				stillParsing = true;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else
-		if(line.startsWith(ID_SUBTITLE_ID)) {
-			reportParsingDone();
-			try {
-				String audioId = line.substring(ID_SUBTITLE_ID.length());
-				language = new Language(LanguageSource.STREAM,""+audioId);
-				parsingLanguage = true;
-				isAudioTrack = false;
-				stillParsing = true;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else
-		if(line.startsWith(ID_FILE_SUB_ID)) {
-			reportParsingDone();
-			try {
-				String subId = line.substring(ID_FILE_SUB_ID.length());
-				language = new Language(LanguageSource.FILE,""+subId);
-				parsingLanguage = true;
-				isAudioTrack = false;
-				stillParsing = true;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else
-		if(parsingLanguage && (line.startsWith(ID_FILE_SUB_FILENAME))) {
-			try {
-				String fileName = line.substring(ID_FILE_SUB_FILENAME.length());
-				try {
-					File f = new File(fileName);
-					language.setSourceInfo(f.getAbsolutePath());
-					fileName = f.getName();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				language.setName(fileName);
-				stillParsing = false;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else
-		if(parsingLanguage && (line.startsWith("ID_AID_" + language.getId() + "_NAME=") || line.startsWith("ID_SID_" + language.getId() + "_NAME=")) ) {
-			String key = "ID_AID_" + language.getId() + "_NAME=";
-			String name = line.substring(key.length());
-			language.setName(name);
-			stillParsing = true;
-		} else
-		if(parsingLanguage && (line.startsWith("ID_AID_" + language.getId() + "_LANG=") || line.startsWith("ID_SID_" + language.getId() + "_LANG=") )) {
-			String key = "ID_AID_" + language.getId() + "_LANG=";
-			String isoCode = line.substring(key.length());
-			language.setLanguage(isoCode);
-			stillParsing = true;
-		} else
-		if(parsingLanguage && ( line.startsWith("ID_AID_" + language.getId()) || line.startsWith("ID_SID_" + language.getId())) ) {
-			stillParsing = true;
-		} else
-		if(line.startsWith(ID_AUDIO_TRACK)) {
-			try {
-				String audioId = line.substring(ID_AUDIO_TRACK.length());
-				reportAudioTrackChanged(audioId);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else
-		if(line.startsWith(ID_SUBTITLE_TRACK)) {
-			try {
-				String subtitleId = line.substring(ID_SUBTITLE_TRACK.length());
-				reportSubtitleChanged(subtitleId,LanguageSource.STREAM);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else
-		if(line.startsWith(ANS_SUB)) {
-			try {
-				String subtitleId = line.substring(ANS_SUB.length());
-				reportSubtitleChanged(subtitleId,LanguageSource.STREAM);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}else if(line.startsWith("VDecoder init failed")) {
+		} else if(line.startsWith("VDecoder init failed")) {
 			
 			MediaPlaybackState.Failed.setDetails(  "azemp.failed.nocodec"  );
 			reportNewState(MediaPlaybackState.Failed);
