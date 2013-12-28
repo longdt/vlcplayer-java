@@ -180,7 +180,7 @@ public class Player {
 			}
 		});
 
-		Listener move_listener = new Listener() {
+		final Listener move_listener = new Listener() {
 			public void handleEvent(Event evt) {
 				overControls = false;
 				controls.show();
@@ -198,7 +198,7 @@ public class Player {
 
 		parent.addListener(SWT.MouseMove, move_listener);
 		playerFrame.addListener(SWT.MouseMove, move_listener);
-
+		playerFrame.addListener(SWT.MouseUp, move_listener);
 		playerFrame.addListener(SWT.MouseEnter, new Listener() {
 
 			public void handleEvent(Event arg0) {
@@ -291,27 +291,17 @@ public class Player {
 					break;
 				case ' ':
 					playerFrame.togglePause();
+					move_listener.handleEvent(null);
 					break;
 				case 'f':
 				case 'F':
-					if ((event.stateMask & SWT.COMMAND) != 0) {
-						playerFrame.setFullscreen(!playerFrame.getFullscreen());
-					}
-					break;
-				case '\r':
-					if ((event.stateMask & SWT.ALT) != 0) {
-						playerFrame.setFullscreen(!playerFrame.getFullscreen());
-					}
-					break;
-				case 'w':
-					if ((event.stateMask & SWT.COMMAND) != 0) {
-						parent.close();
-					}
+					playerFrame.setFullscreen(!playerFrame.getFullscreen());
 					break;
 
 				}
 			}
 		};
+		playerFrame.addListener(SWT.KeyDown, keyListener);
 		parent.addListener(SWT.KeyDown, keyListener);
 		controls.getShell().addListener(SWT.KeyDown, keyListener);
 
@@ -635,7 +625,7 @@ public class Player {
 		Shell shell = new Shell();
 		shell.setSize(880, 480);
 		shell.setText("SWT Application");
-		play(shell, "/media/workspace/movies/Life.of.Pi.2012.720p.WEB-DL.DD5.1.H.264-HD4FUN.mkv");
+		play(shell, "C:\\Users\\Public\\Videos\\Sample Videos\\Wildlife.wmv");
 	}
 
 }

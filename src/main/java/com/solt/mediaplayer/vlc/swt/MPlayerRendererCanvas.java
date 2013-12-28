@@ -15,9 +15,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
-import uk.co.caprica.vlcj.runtime.windows.WindowsCanvas;
-
-import com.solt.mediaplayer.util.Utils;
 import com.sun.jna.Native;
 
 public class MPlayerRendererCanvas extends Composite implements MPlayerRendererInterface {
@@ -26,7 +23,7 @@ public class MPlayerRendererCanvas extends Composite implements MPlayerRendererI
 	
 	public MPlayerRendererCanvas(Composite parent) {
 		super(parent, SWT.EMBEDDED);
-		videoSurfaceCanvas = Utils.isLinux() ? new Canvas() : new WindowsCanvas();
+		videoSurfaceCanvas = new Canvas();
 		setLayoutData(new GridData(GridData.FILL_BOTH));
 	    videoFrame = SWT_AWT.new_Frame(this);
 	    videoSurfaceCanvas.setBackground(java.awt.Color.black);
@@ -34,9 +31,6 @@ public class MPlayerRendererCanvas extends Composite implements MPlayerRendererI
 	}
 	
 	public void release() {
-		if (videoSurfaceCanvas instanceof WindowsCanvas) {
-			((WindowsCanvas)videoSurfaceCanvas).release();
-		}
 		videoFrame.dispose();
 		dispose();
 	}
@@ -86,13 +80,42 @@ public class MPlayerRendererCanvas extends Composite implements MPlayerRendererI
 		} else if (eventType == SWT.KeyDown) {
 			videoSurfaceCanvas.addKeyListener(new KeyAdapter() {
 				@Override
-				public void keyPressed(KeyEvent e) {
+				public void keyPressed(final KeyEvent e) {
 					Display.getDefault().asyncExec(new Runnable() {
 					    public void run() {
 							Event evt = new Event();
+							evt.character = e.getKeyChar();
 							listener.handleEvent(evt);
 					    }
 					});
+				}
+			});
+		} else if (eventType == SWT.MouseDoubleClick){
+			videoSurfaceCanvas.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					 if (e.getClickCount() == 2) { //double click
+						 Display.getDefault().asyncExec(new Runnable() {
+							 public void run() {
+								 Event evt = new Event();
+								 listener.handleEvent(evt);
+							 }
+						 });
+					 }
+				}
+			});
+		} else if (eventType == SWT.MouseUp || eventType == SWT.MouseDown) {
+			videoSurfaceCanvas.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					 if (e.getClickCount() == 1) {
+						 Display.getDefault().asyncExec(new Runnable() {
+						    public void run() {
+								Event evt = new Event();
+								listener.handleEvent(evt);
+						    }
+						});
+					 }
 				}
 			});
 		}

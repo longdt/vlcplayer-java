@@ -40,7 +40,8 @@ public class VLCPlayer {
     	LibVlc libvlc = LibVlcFactory.factory().synchronise().log().create();
     	playerFactory = new MediaPlayerFactory(libvlc, "--no-video-title");
     	mediaPlayer = playerFactory.newEmbeddedMediaPlayer();
-
+    	mediaPlayer.setEnableKeyInputHandling(false);
+    	mediaPlayer.setEnableMouseInputHandling(false);
         mediaPlayer.setVideoSurface(ComponentIdVideoSurface.create(canvasId));
         if (media != null) {
         	mediaPlayer.playMedia(media);
