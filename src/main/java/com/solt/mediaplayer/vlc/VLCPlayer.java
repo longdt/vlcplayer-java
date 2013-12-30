@@ -143,8 +143,7 @@ public class VLCPlayer {
             		mediaPlayer.setSubTitleFile(new File(inputLine));
             	}
             } else if (inputLine.equalsIgnoreCase(VLCCommand.CLOSE)) {
-            	shudown();
-            	System.exit(0);
+            	return;
             }
             else {
                 System.err.println("unknown command: ." + inputLine + ".");
@@ -174,15 +173,15 @@ public class VLCPlayer {
             }
             player = new VLCPlayer(Integer.parseInt(args[0]), media);
             player.handleRequest();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
-        }
-        finally {
+        } finally {
         	if (stream != null) {
         		stream.close();
         	}
-        	System.exit(1);
+        	if (player != null) {
+        		player.shudown();
+        	}
         }
     }
 }

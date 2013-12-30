@@ -608,8 +608,12 @@ public class MPlayerInstance {
 		command_sem.release();
 
 		if (mPlayerProcess != null) {
-
-			mPlayerProcess.destroy();
+			try {
+				mPlayerProcess.waitFor();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				mPlayerProcess.destroy();
+			}
 		}
 
 		stop_sem.reserve();
