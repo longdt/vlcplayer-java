@@ -29,6 +29,7 @@ import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 public class VLCPlayer {
 	private EmbeddedMediaPlayer mediaPlayer;
 	private MediaPlayerFactory playerFactory;
+	private volatile boolean loadSubFile; //hack fast check loadsub from file
 	
     public VLCPlayer(int canvasId) throws Exception {
     	this(canvasId, null);
@@ -66,7 +67,9 @@ public class VLCPlayer {
         			subs.put(td.id(), td.description());
         		}
         		if (!subs.isEmpty()) {
-        			subs.put(VLCCommand.SUB_STATE, mediaPlayer.getSpu());
+        			if (!loadSubFile) { //hack fast check loadsub from file. If call loadSub then doesn't set sub state
+        				subs.put(VLCCommand.SUB_STATE, String.valueOf(mediaPlayer.getSpu()));
+        			}
         			System.out.println(VLCCommand.STATUS_SUBS + " " + subs.toString());
         		}
         	}
@@ -138,6 +141,7 @@ public class VLCPlayer {
             } else if (inputLine.startsWith(VLCCommand.LOAD_SUB)) {
             	inputLine = inputLine.substring(VLCCommand.LOAD_SUB.length() + 1);
             	mediaPlayer.setSubTitleFile(new File(inputLine));
+            	loadSubFile = true;
             	System.out.println(VLCCommand.ANS_SUB_FILE + " "+ inputLine);
             } else if (inputLine.startsWith(VLCCommand.SET_SUB)) {
             	inputLine = inputLine.substring(VLCCommand.SET_SUB.length() + 1);

@@ -232,7 +232,7 @@ public abstract class MPlayer extends BaseMediaPlayer {
 			}
 		} else if (line.startsWith(VLCCommand.STATUS_SUBS)) {
 			JSONObject subStats = (JSONObject) JSONValue.parse(line.substring(VLCCommand.STATUS_SUBS.length() + 1));
-			String state = String.valueOf(subStats.remove(VLCCommand.SUB_STATE));
+			String state = (String) subStats.remove(VLCCommand.SUB_STATE);
 			Map<String, String> subs = new TreeMap<String, String>(subStats);
 			for (Entry<String, String> entry : subs.entrySet()) {
 				language = new Language(LanguageSource.STREAM, entry.getKey());
