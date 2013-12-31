@@ -47,11 +47,16 @@ public class VLCPlayer {
         	mediaPlayer.playMedia(media);
         }
         mediaPlayer.addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
+        	private boolean playing;
         	
         	@SuppressWarnings("unchecked")
 			@Override
         	public void playing(MediaPlayer mediaPlayer) {
         		System.out.println(VLCCommand.STATUS_PLAYING);
+        		if (playing) {
+        			return;
+        		}
+        		playing = true;
         		List<TrackDescription> spus = mediaPlayer.getSpuDescriptions();
         		JSONObject subs = new JSONObject();
         		for (TrackDescription td : spus) {

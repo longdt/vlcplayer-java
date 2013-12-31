@@ -227,7 +227,7 @@ public abstract class MPlayer extends BaseMediaPlayer {
 
 				if(instance.activateNextSubtitleLoaded) {
 					instance.activateNextSubtitleLoaded = false;
-					setSubtitles(parsed);
+					reportSubtitleChanged(parsed.getId(), parsed.getSource());
 				}
 			}
 		} else if (line.startsWith(VLCCommand.STATUS_SUBS)) {
@@ -240,7 +240,7 @@ public abstract class MPlayer extends BaseMediaPlayer {
 				Language parsed = language;
 				reportParsingDone();
 				if (entry.getKey().equals(state)) {
-					setSubtitles(parsed);
+					reportSubtitleChanged(parsed.getId(), parsed.getSource());
 				}
 			}
 			
@@ -269,7 +269,7 @@ public abstract class MPlayer extends BaseMediaPlayer {
 
 				if(instance.activateNextSubtitleLoaded) {
 					instance.activateNextSubtitleLoaded = false;
-					setSubtitles(parsed);
+					reportSubtitleChanged(parsed.getId(), parsed.getSource());
 				}
 			}
 		}
