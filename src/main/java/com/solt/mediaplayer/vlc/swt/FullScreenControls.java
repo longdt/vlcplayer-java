@@ -360,7 +360,8 @@ public class FullScreenControls {
 					MenuItem itemOff = new MenuItem(subtitlesMenu, SWT.RADIO);
 					itemOff.setText("Off");
 					itemOff.addListener(SWT.Selection, subtitleSelectionListener);
-					if(player.getActiveSubtitle() == null) {
+					Language currentSubtitle = player.getActiveSubtitle();
+					if(currentSubtitle == null) {
 						itemOff.setSelection(true);
 					}
 					
@@ -370,8 +371,7 @@ public class FullScreenControls {
 						item.setText(label);
 						item.setData(l);
 						
-						Language currentSubtitle = player.getActiveSubtitle();
-						if(l.getId() != null && l.getId().equals(player.getActiveSubtitleId()) && (currentSubtitle == null || l.getSource() == currentSubtitle.getSource())) {
+						if(currentSubtitle != null && l.getId().equals(currentSubtitle.getId()) && l.getSource() == currentSubtitle.getSource()) {
 							item.setSelection(true);
 						}
 						item.addListener(SWT.Selection, subtitleSelectionListener);

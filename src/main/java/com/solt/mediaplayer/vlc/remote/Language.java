@@ -1,5 +1,6 @@
 package com.solt.mediaplayer.vlc.remote;
 
+import java.security.InvalidParameterException;
 import java.util.Locale;
 
 public class Language {
@@ -13,6 +14,9 @@ public class Language {
 	Locale language;
 	
 	public Language(LanguageSource source, String id) {
+		if (id == null || source == null) {
+			throw new InvalidParameterException("source and id must not null");
+		}
 		this.source = source;
 		this.id = id;
 	}
