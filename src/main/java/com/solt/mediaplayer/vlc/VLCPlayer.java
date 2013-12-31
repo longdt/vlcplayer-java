@@ -58,7 +58,7 @@ public class VLCPlayer {
         			if (td.id() == -1) {
         				continue;
         			}
-        			subs.put(td.id() - 1, td.description());
+        			subs.put(td.id(), td.description());
         		}
         		if (!subs.isEmpty()) {
         			subs.put(VLCCommand.SUB_STATE, mediaPlayer.getSpu());

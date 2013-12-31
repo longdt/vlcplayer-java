@@ -385,11 +385,6 @@ public class MPlayerInstance {
 
 				sendCommand(VLCCommand.SET_TIME + " " + value);
 
-				if (paused) {
-
-					sendCommand("frame_step");
-				}
-
 				// sendCommand("mute 0");
 
 				sendCommand(VLCCommand.GET_TIME);
@@ -482,7 +477,7 @@ public class MPlayerInstance {
 
 						pending_sleeps += 100;
 
-						sendCommand("sleep 100");
+						// sendCommand("sleep 100");
 					}
 
 					sendCommand("mute 0");
@@ -519,16 +514,12 @@ public class MPlayerInstance {
 				if (now - redraw_last_frame > delay) {
 
 					redraw_last_frame = now;
-
-					sendCommand("frame_step");
 				}
 			} else {
 
 				doMute(true);
 
 				redraw_last_frame = now;
-
-				sendCommand("frame_step");
 
 				redrawing = true;
 
@@ -562,8 +553,8 @@ public class MPlayerInstance {
 
 	protected String setSubtitles(Language language) {
 		synchronized (this) {
-			if (language == null) {
-				sendCommand(VLCCommand.SET_SUB + " 0");
+			if (language == null) { //disable subtitle
+				sendCommand(VLCCommand.SET_SUB + " -1");
 				return null;
 			} else {
 				String sub = language.getSource() == LanguageSource.STREAM ? language.getId() : language.getSourceInfo();
