@@ -117,6 +117,7 @@ public abstract class BaseMediaPlayer implements MediaPlayer,MetaDataListener,St
 	
 	public void open(String fileOrUrl) {
 		if(currentState == MediaPlaybackState.Uninitialized || currentState == MediaPlaybackState.Stopped) {
+			initialize();
 			openedFile = fileOrUrl;
 			doOpen(fileOrUrl);
 		} else {
