@@ -2,6 +2,7 @@ package com.solt.mediaplayer.vlc.remote;
 
 import com.solt.mediaplayer.vlc.VLCPlayer;
 import com.sun.jna.Native;
+
 import java.awt.Canvas;
 import java.io.File;
 import java.util.ArrayList;
@@ -60,6 +61,7 @@ public class RemotePlayerFactory {
         		cmdList.add("-Djna.library.path=" + vlc.getAbsolutePath());
         	}
         }
+        cmdList.add("-Djava.io.tmpdir=" + System.getProperty("java.io.tmpdir"));
         cmdList.add(VLCPlayer.class.getName());
         cmdList.add(Long.toString(componentId));
         if (fileOrUrl != null) {
