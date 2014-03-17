@@ -83,6 +83,11 @@ public class VLCPlayer {
         	public void lengthChanged(MediaPlayer mediaPlayer, long newLength) {
         		System.out.println(VLCCommand.STATUS_LENGTH + " " + (newLength / 1000f));
         	}
+        	
+        	@Override
+        	public void finished(MediaPlayer mediaPlayer) {
+        		System.out.println(VLCCommand.STATUS_FINISHED);
+        	}
         });
     }
     

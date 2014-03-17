@@ -610,6 +610,7 @@ public class Player {
 
 		// shell.setFullScreen(true);
 
+		player.prepare();
 		player.open(fileOrUrl, true);
 
 		shell.open();
@@ -625,7 +626,7 @@ public class Player {
 		Shell shell = new Shell();
 		shell.setSize(880, 480);
 		shell.setText("SWT Application");
-		play(shell, "C:\\Users\\Public\\Videos\\Sample Videos\\Wildlife.wmv");
+		play(shell, "D:\\.mediacache\\The Croods (2013)\\The.Croods.2013.720p.BluRay.x264.YIFY.mp4");
 	}
 
 }

@@ -16,7 +16,6 @@ import com.solt.mediaplayer.vlc.remote.RemotePlayerFactory;
 
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 import uk.co.caprica.vlcj.discovery.NativeDiscovery;
-import uk.co.caprica.vlcj.runtime.windows.WindowsCanvas;
 
 public class DemoPlayer {
 	protected Shell shell;
@@ -61,7 +60,7 @@ public class DemoPlayer {
 		shell.setText("SWT Application");
 		Composite videoComposite = new Composite(shell, SWT.EMBEDDED | SWT.NO_BACKGROUND);
 		Frame videoFrame = SWT_AWT.new_Frame(videoComposite);
-		WindowsCanvas videoSurface = new WindowsCanvas();
+		Canvas videoSurface = new Canvas();
 		videoSurface.addMouseMotionListener(new MouseAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {

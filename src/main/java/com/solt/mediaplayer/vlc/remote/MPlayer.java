@@ -64,7 +64,7 @@ public abstract class MPlayer extends BaseMediaPlayer {
 								
 								e.printStackTrace();
 							}
-						} else if (timeWait != 0) {
+						} else if (timeWait != 0 && getCurrentState() != MediaPlaybackState.Stopped) {
 							stateChanged(MediaPlaybackState.Buffering);
 							buffering = true;
 						}
@@ -244,6 +244,8 @@ public abstract class MPlayer extends BaseMediaPlayer {
 				}
 			}
 			
+		} else if (line.equals(VLCCommand.STATUS_FINISHED)) {
+			reportNewState(MediaPlaybackState.Stopped);
 		} else if(line.startsWith("VDecoder init failed")) {
 			
 			MediaPlaybackState.Failed.setDetails(  "azemp.failed.nocodec"  );
