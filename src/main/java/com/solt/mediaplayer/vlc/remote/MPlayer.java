@@ -192,6 +192,7 @@ public abstract class MPlayer extends BaseMediaPlayer {
 					if(aspect > 0 && abs(aspect-(float)videoWidth / (float)videoHeight) > 0.1) {
 						displayWidth = (int) (displayHeight * aspect);
 					}
+					displayHeight += 150;
 					if(metaDataListener != null) {
 						metaDataListener.receivedVideoResolution(videoWidth, videoHeight);
 						metaDataListener.receivedDisplayResolution(displayWidth, displayHeight);
