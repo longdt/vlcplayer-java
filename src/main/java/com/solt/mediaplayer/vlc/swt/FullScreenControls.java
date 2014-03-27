@@ -28,6 +28,8 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
+import uk.co.caprica.vlcj.filter.SubTitleFileFilter;
+
 import com.solt.mediaplayer.util.FontUtils;
 import com.solt.mediaplayer.util.Utils;
 import com.solt.mediaplayer.vlc.remote.Language;
@@ -38,9 +40,8 @@ import com.solt.mediaplayer.vlc.remote.VolumeListener;
 
 
 public class FullScreenControls {
+	private static final String[] SUBTITLE_EXTENSIONS;
 	
-	
-
 	private static final String PLAYER_INFO_URL = "http://sharephim.vn";
 	
 	//Shel alpha
@@ -91,6 +92,17 @@ public class FullScreenControls {
 	private static final int VOLUME_SLIDER_MIN_X = 36;
 	private static final int VOLUME_SLIDER_MAX_X = 74;
 	private static final int VOLUME_SLIDER_Y = 15;
+	
+	static {
+		String[] extensions = SubTitleFileFilter.INSTANCE.getExtensions();
+		SUBTITLE_EXTENSIONS = new String[1];
+		StringBuilder sb = new StringBuilder();
+		sb.append("*.").append(extensions[0]);
+		for (int i = 1; i < extensions.length; ++i) {
+			 sb.append(";*.").append(extensions[i]);
+		}
+		SUBTITLE_EXTENSIONS[0] = sb.toString();
+	}
 	
 	
 	Display display;
@@ -433,6 +445,7 @@ public class FullScreenControls {
 						} catch(Exception e) {
 							
 						}
+						fd.setFilterExtensions(SUBTITLE_EXTENSIONS);
 						String result = fd.open();
 						if(!wasPlayerPaused) {
 							player.play();
