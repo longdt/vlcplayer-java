@@ -39,7 +39,7 @@ public class VLCPlayer {
  
         //Lifted pretty much out of the VLCJ code
     	LibVlc libvlc = LibVlcFactory.factory().synchronise().log().create();
-    	playerFactory = new MediaPlayerFactory(libvlc, "--no-video-title");
+    	playerFactory = new MediaPlayerFactory(libvlc, "--no-video-title", "--freetype-rel-fontsize=12", "--freetype-font=Tahoma Bold", "--ffmpeg-workaround-bugs=4");
     	mediaPlayer = playerFactory.newEmbeddedMediaPlayer();
     	mediaPlayer.setEnableKeyInputHandling(false);
     	mediaPlayer.setEnableMouseInputHandling(false);
