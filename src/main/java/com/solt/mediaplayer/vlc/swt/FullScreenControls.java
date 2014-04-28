@@ -1261,7 +1261,7 @@ public class FullScreenControls {
 					return;
 				}
 				shell.setAlpha(alpha);
-				if(alpha == 0 && shell.isVisible()) {
+				if(alpha == 0 && shell.isVisible() && Utils.isWindows()) {
 					shell.setVisible(false);
 				}
 				if(alpha > 0 && ! shell.isVisible()) {
