@@ -17,14 +17,14 @@ import com.solt.mediaplayer.vlc.VLCCommand;
 
 
 public abstract class MPlayer extends BaseMediaPlayer {
-
+	private static final int DEFAULT_TIME_WAIT_BUFFER = 1200;
 	private List<String> output;
 	
 	private volatile boolean disposed = false;
 	
 	private Thread outputParser;
 		
-	private volatile int timeWait = 1000;
+	private volatile int timeWait = DEFAULT_TIME_WAIT_BUFFER;
 	private boolean firstLengthReceived = false;
 	private boolean firstVolumeReceived = false;
 	
@@ -341,7 +341,7 @@ public abstract class MPlayer extends BaseMediaPlayer {
 			
 			instance = current_instance = new MPlayerInstance();
 			synchronized (output) {
-				timeWait = 1000;
+				timeWait = DEFAULT_TIME_WAIT_BUFFER;
 				output.notifyAll();
 			}
 		}
@@ -399,7 +399,7 @@ public abstract class MPlayer extends BaseMediaPlayer {
 	doResume() 
 	{
 		synchronized (output) {
-			timeWait = 1000;
+			timeWait = DEFAULT_TIME_WAIT_BUFFER;
 			output.notifyAll();
 		}
 		MPlayerInstance instance = getCurrentInstance();
