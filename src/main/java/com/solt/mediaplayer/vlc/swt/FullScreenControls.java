@@ -31,8 +31,11 @@ import org.eclipse.swt.widgets.Shell;
 import uk.co.caprica.vlcj.filter.SubTitleFileFilter;
 
 import com.solt.mediaplayer.util.FontUtils;
+import com.solt.mediaplayer.util.SimpleTimer;
+import com.solt.mediaplayer.util.SubLoader;
 import com.solt.mediaplayer.util.Utils;
 import com.solt.mediaplayer.vlc.remote.Language;
+import com.solt.mediaplayer.vlc.remote.LanguageSource;
 import com.solt.mediaplayer.vlc.remote.MediaPlaybackState;
 import com.solt.mediaplayer.vlc.remote.PositionListener;
 import com.solt.mediaplayer.vlc.remote.StateListener;
@@ -344,7 +347,11 @@ public class FullScreenControls {
 					MenuItem item =(MenuItem) evt.widget;
 					if(item.getSelection()) {
 						Language language = (Language) evt.widget.getData();
-						player.setSubtitles(language);									
+						if (language != null && language.getSource() == LanguageSource.HTTP) {
+							player.activeSubtitleChanged(language.getId(), language.getSource());
+						} else {
+							player.setSubtitles(language);									
+						}
 					}
 				} catch (Exception e) {
 					// TODO: handle exception
@@ -377,13 +384,16 @@ public class FullScreenControls {
 						itemOff.setSelection(true);
 					}
 					
-					for(Language l : subtitles) {						
+					for(Language l : subtitles) {
+						if (l.getSource() == LanguageSource.HTTP && !l.isLoading()) {
+							SimpleTimer.schedule(new SubLoader(player, l), 0);
+						}
 						MenuItem item = new MenuItem(subtitlesMenu, SWT.RADIO);
 						String label = l.getName() != null ? l.getName() : "";
 						item.setText(label);
 						item.setData(l);
 						
-						if(currentSubtitle != null && l.getId().equals(currentSubtitle.getId()) && l.getSource() == currentSubtitle.getSource()) {
+						if(currentSubtitle != null && l.getId().equals(currentSubtitle.getId()) && l.getName().equals(currentSubtitle.getName())) {
 							item.setSelection(true);
 						}
 						item.addListener(SWT.Selection, subtitleSelectionListener);

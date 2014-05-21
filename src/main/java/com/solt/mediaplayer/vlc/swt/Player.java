@@ -408,6 +408,18 @@ public class Player {
 			playerFrame.loadSubtitlesFile(sub);
 		}
 	}
+	
+	public void open(String file, String sub, boolean stream_mode, String otherSubName, String otherSubUrl) {
+		open(file, sub, stream_mode);
+		addSubtitle(otherSubName, otherSubUrl);
+	}
+	
+	private void addSubtitle(String name, String subtitle) {
+		Language language = new Language(LanguageSource.HTTP, String.valueOf(subtitle.hashCode()));
+		language.setName(name);
+		language.setSourceInfo(subtitle);
+		playerFrame.foundSubtitle(language);
+	}
 
 	public void prepare() {
 		stop();
@@ -626,7 +638,7 @@ public class Player {
 		Shell shell = new Shell();
 		shell.setSize(880, 480);
 		shell.setText("SWT Application");
-		play(shell, "D:\\.mediacache\\The Croods (2013)\\The.Croods.2013.720p.BluRay.x264.YIFY.mp4");
+		play(shell, "/media/thienlong/data/Music/Dead Fantasy 5.mp4");
 	}
 
 }

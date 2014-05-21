@@ -9,6 +9,7 @@ public class Language {
 	String name;
 	LanguageSource source;
 	String sourceInfo;
+	private boolean loading;
 
 
 	Locale language;
@@ -51,13 +52,23 @@ public class Language {
 		return source;
 	}
 	
+	public void setSource(LanguageSource source) {
+		this.source = source;
+	}
+	
 	public String getSourceInfo() {
 		return sourceInfo;
 	}
 
-
-
 	public void setSourceInfo(String sourceInfo) {
 		this.sourceInfo = sourceInfo;
+	}
+
+	public boolean isLoading() {
+		return loading;
+	}
+
+	public void setLoading(boolean loading) {
+		this.loading = loading;
 	}
 }

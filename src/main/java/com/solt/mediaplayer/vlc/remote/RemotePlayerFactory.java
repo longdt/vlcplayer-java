@@ -8,10 +8,15 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.co.caprica.vlcj.player.MediaPlayerFactory;
 import uk.co.caprica.vlcj.runtime.RuntimeUtil;
  
 public class RemotePlayerFactory {
+	
 	private static final boolean DEBUG_MODE = false;
+	static {
+		MediaPlayerFactory.class.getName();
+	}
  
     public static RemotePlayer getRemotePlayer(long componentId) {
         try {
@@ -62,6 +67,7 @@ public class RemotePlayerFactory {
         	}
         }
         cmdList.add("-Djava.io.tmpdir=" + System.getProperty("java.io.tmpdir"));
+        cmdList.add("-Djna.nosys=true");
         cmdList.add(VLCPlayer.class.getName());
         cmdList.add(Long.toString(componentId));
         if (fileOrUrl != null) {
