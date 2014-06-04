@@ -1,5 +1,6 @@
 package com.solt.mediaplayer.vlc.remote;
 
+import com.solt.mediaplayer.util.Utils;
 import com.solt.mediaplayer.vlc.VLCPlayer;
 import com.sun.jna.Native;
 
@@ -61,7 +62,7 @@ public class RemotePlayerFactory {
         if (jnaLibPath != null) {
         	cmdList.add("-Djna.library.path=" + jnaLibPath);
         } else {
-        	File vlc = new File("VLC");
+        	File vlc = Utils.isMacOSX() ? new File("VLC/lib") : new File("VLC");
         	if (vlc.isDirectory()) {
         		cmdList.add("-Djna.library.path=" + vlc.getAbsolutePath());
         	}

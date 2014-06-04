@@ -185,7 +185,7 @@ public class VLCPlayer {
             if (args.length == 2) {
             	media = args[1];
             }
-            player = new VLCPlayer(Integer.parseInt(args[0]), media);
+            player = new VLCPlayer(Long.parseLong(args[0]), media);
             player.handleRequest();
         } catch (Exception ex) {
             ex.printStackTrace();
